@@ -4,6 +4,10 @@
 
 SDL_Window *win;
 SDL_Renderer *ren;
+
+SDL_Texture *scrtexture;
+Uint32 *pixels = new Uint32[640 * 400];
+
 SDL_Surface *hei;
 SDL_Surface *map;
 
@@ -18,14 +22,21 @@ int ybuffer[640] = { 0 };
 Uint32 heibuffer[1024 * 1024] = { 0 };
 Uint32 mapbuffer[1024 * 1024] = { 0 };
 
+void DoQuit() {
+	delete[] pixels;
+	SDL_DestroyTexture(scrtexture);
+	SDL_DestroyRenderer(ren);
+	SDL_DestroyWindow(win);
+}
+
+
 SDL_Surface* LoadSurface(std::string file) {
 	std::string imagePath = SDL_GetBasePath();
 	imagePath += file;
 
 	SDL_Surface *bmp = SDL_LoadBMP(imagePath.c_str());
 	if (bmp == nullptr) {
-		SDL_DestroyRenderer(ren);
-		SDL_DestroyWindow(win);
+		DoQuit();
 		std::cout << "SDL_LoadBMP Error: " << SDL_GetError() << std::endl;
 		SDL_Quit();
 		return NULL;
@@ -41,6 +52,7 @@ SDL_Texture* LoadTexture(std::string file) {
 	SDL_FreeSurface(bmp);
 
 	if (tex == nullptr) {
+		DoQuit();
 		SDL_DestroyRenderer(ren);
 		SDL_DestroyWindow(win);
 		std::cout << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
@@ -51,23 +63,30 @@ SDL_Texture* LoadTexture(std::string file) {
 	return tex;
 }
 
+
 void VertLine(int x, int y1, int y2, Uint32 color, float z) {
 	if (x < 0 || x > effu_w) return;
 	if (y1 > effu_h || y2 > effu_h) return;
 	float zz = 1.0 - z * 0.001;
-	Uint8 *colors = (Uint8*)&color;
-	SDL_SetRenderDrawColor(ren, colors[2]*zz, colors[1]*zz, colors[0]*zz, SDL_ALPHA_OPAQUE);
+	if (zz < 0) zz = 0;
 
-	SDL_Rect r;
-	r.x = x;
-	r.y = y1-60;
-	r.w = 1;
-	r.h = y2;
-	SDL_RenderDrawRect(ren, &r);
+	Uint8 *c = (Uint8*)&color;
+
+	c[0] *= zz;
+	c[1] *= zz;
+	c[2] *= zz;
+
+	Uint32 *cc = (Uint32*)c;
+
+	int ys = y2;
+	while (ys > y1) {
+		ys--;
+		pixels[ys * 640 + x] = *cc;
+	}
+
 }
 
-Uint32 GetPixel(SDL_Surface *surface, int x, int y)
-{
+Uint32 GetPixel(SDL_Surface *surface, int x, int y) {
 	int bpp = surface->format->BytesPerPixel;
 	/* Here p is the address to the pixel we want to retrieve */
 	Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
@@ -112,8 +131,8 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 		ybuffer[i] = effu_h;
 	}
 
-	float dz = 1.;
-	float z = 1.;
+	float dz = 0.001;
+	float z = 1;
 
 	while (z < distance) {
 		plx = (-cos_a * z - sin_a * z) + px;
@@ -130,9 +149,7 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 			int c_ply = (int)ply & 1023;
 			int offset = (c_ply << 10) + c_plx;
 
-			float heightvalue = heibuffer[offset];
-
-			int height_on_screen = (int)((h - heightvalue) / z * scale_h + horizon);
+			int height_on_screen = (int)((h - heibuffer[offset]) / z * scale_h + horizon);
 			VertLine(i, (int)height_on_screen, ybuffer[i], mapbuffer[offset], z);
 
 			if (height_on_screen < ybuffer[i]) ybuffer[i] = height_on_screen;
@@ -142,7 +159,7 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 		}
 
 		z += dz;
-		dz += 0.02;
+		dz += 0.01;
 	}
 }
 
@@ -150,8 +167,8 @@ void RenderHeightmap() {
 	SDL_SetRenderDrawColor(ren, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(ren);
 
-	float angle = SDL_GetTicks()*0.0001;
-	DoHeightmap(SDL_GetTicks()*0.02, SDL_GetTicks()*0.02, angle,140, 50, 120, 1000);
+	float angle = SDL_GetTicks()*0.0002;
+	DoHeightmap(SDL_GetTicks()*0.08, SDL_GetTicks()*0.06, angle,180, 50+cos(SDL_GetTicks()*0.001)*25, 250, 2000);
 }
 
 int main(int argc, char * argv[]) {
@@ -175,6 +192,8 @@ int main(int argc, char * argv[]) {
 		return 1;
 	}
 
+	scrtexture = SDL_CreateTexture(ren, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, 640, 400);
+
 	hei = LoadSurface("d1.bmp");
 	map = LoadSurface("c1.bmp");
 
@@ -191,6 +210,8 @@ int main(int argc, char * argv[]) {
 			mapbuffer[y * 1024 + x] = GetPixel(map, x, y);
 		}
 	}
+
+	memset(pixels, 0, 640 * 400 * sizeof(Uint32));
 
 	SDL_Event e;
 	bool quit = false;
@@ -210,16 +231,18 @@ int main(int argc, char * argv[]) {
 				}
 			}
 		}
-		SDL_RenderClear(ren);
+
+		SDL_UpdateTexture(scrtexture, NULL, pixels, 640 * sizeof(Uint32));
 
 		// draw
 		RenderHeightmap();
 
+		SDL_UpdateTexture(scrtexture, NULL, pixels, 640 * sizeof(Uint32));
+		SDL_RenderCopy(ren, scrtexture, NULL, NULL);
 		SDL_RenderPresent(ren);
 	}
 
-	SDL_DestroyRenderer(ren);
-	SDL_DestroyWindow(win);
+	DoQuit();
 	SDL_Quit();
 
 	return 0;
