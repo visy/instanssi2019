@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <string>
 #include "SDL2-2.0.9\include\SDL.h"
 
@@ -6,21 +6,24 @@ SDL_Window *win;
 SDL_Renderer *ren;
 
 SDL_Texture *scrtexture;
-Uint32 *pixels = new Uint32[640 * 400];
+
+int effu_w = 140;
+int effu_h = 400;
+
+Uint32 *pixels = new Uint32[effu_w * effu_h];
 
 SDL_Surface *hei;
 SDL_Surface *map;
-
-int effu_w = 640;
-int effu_h = 400;
 
 float plx;
 float ply;
 float prx;
 float pry;
-int ybuffer[640] = { 0 };
+int ybuffer[1024] = { 0 };
 Uint32 heibuffer[1024 * 1024] = { 0 };
 Uint32 mapbuffer[1024 * 1024] = { 0 };
+
+Uint32 time = 0;
 
 void DoQuit() {
 	delete[] pixels;
@@ -81,7 +84,7 @@ void VertLine(int x, int y1, int y2, Uint32 color, float z) {
 	int ys = y2;
 	while (ys > y1) {
 		ys--;
-		pixels[ys * 640 + x] = *cc;
+		pixels[ys * effu_w + x] *= (*cc)>>time;
 	}
 
 }
@@ -119,6 +122,7 @@ Uint32 GetPixel(SDL_Surface *surface, int x, int y) {
 Uint8 luma(Uint8 r, Uint8 g, Uint8 b) {
 	return (Uint8)(0.2126*r + 0.7152*g + 0.0722*b);
 }
+
 
 void DoHeightmap(float px, float py, float angle, float h, float horizon, float scale_h, float distance) {
 	int sw = effu_w;
@@ -167,9 +171,18 @@ void RenderHeightmap() {
 	SDL_SetRenderDrawColor(ren, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(ren);
 
-	float angle = SDL_GetTicks()*0.0002;
-	DoHeightmap(SDL_GetTicks()*0.08, SDL_GetTicks()*0.06, angle,180, 50+cos(SDL_GetTicks()*0.001)*25, 250, 2000);
+	float angle = time *0.0002;
+
+	for (int i = 0; i < 9; i++) {
+		
+		DoHeightmap(time*0.08, time*0.06, angle,180, 50+cos(time*0.001)*25, 250, 2000);
+	}
+
+	for (int i = 0; i < effu_w*effu_h; i++) {
+		pixels[i] -= 100;
+	}
 }
+
 
 int main(int argc, char * argv[]) {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -177,7 +190,7 @@ int main(int argc, char * argv[]) {
 		return 1;
 	}
 
-	win = SDL_CreateWindow("instanssi 2019 demo", 100, 100, 640, 400, SDL_WINDOW_SHOWN);
+	win = SDL_CreateWindow("instanssi 2019 demo", 100, 100, 1920, 1080, SDL_WINDOW_SHOWN);
 
 	if (win == nullptr) {
 		std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
@@ -192,7 +205,7 @@ int main(int argc, char * argv[]) {
 		return 1;
 	}
 
-	scrtexture = SDL_CreateTexture(ren, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, 640, 400);
+	scrtexture = SDL_CreateTexture(ren, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, effu_w, effu_h);
 
 	hei = LoadSurface("d1.bmp");
 	map = LoadSurface("c1.bmp");
@@ -211,7 +224,7 @@ int main(int argc, char * argv[]) {
 		}
 	}
 
-	memset(pixels, 0, 640 * 400 * sizeof(Uint32));
+	memset(pixels, 0, effu_w * effu_h * sizeof(Uint32));
 
 	SDL_Event e;
 	bool quit = false;
@@ -232,12 +245,15 @@ int main(int argc, char * argv[]) {
 			}
 		}
 
-		SDL_UpdateTexture(scrtexture, NULL, pixels, 640 * sizeof(Uint32));
+		time = SDL_GetTicks();
+
+		SDL_UpdateTexture(scrtexture, NULL, pixels, effu_w * sizeof(Uint32));
 
 		// draw
 		RenderHeightmap();
 
-		SDL_UpdateTexture(scrtexture, NULL, pixels, 640 * sizeof(Uint32));
+		SDL_UpdateTexture(scrtexture, NULL, pixels, effu_w * sizeof(Uint32));
+
 		SDL_RenderCopy(ren, scrtexture, NULL, NULL);
 		SDL_RenderPresent(ren);
 	}
