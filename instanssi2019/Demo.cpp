@@ -7,7 +7,7 @@ SDL_Renderer *ren;
 
 SDL_Texture *scrtexture;
 
-int effu_w = 140;
+int effu_w = 640;
 int effu_h = 400;
 
 Uint32 *pixels = new Uint32[effu_w * effu_h];
@@ -84,7 +84,7 @@ void VertLine(int x, int y1, int y2, Uint32 color, float z) {
 	int ys = y2;
 	while (ys > y1) {
 		ys--;
-		pixels[ys * effu_w + x] *= (*cc)>>time;
+		pixels[ys * effu_w + x] += (*cc);
 	}
 
 }
@@ -124,7 +124,7 @@ Uint8 luma(Uint8 r, Uint8 g, Uint8 b) {
 }
 
 
-void DoHeightmap(float px, float py, float angle, float h, float horizon, float scale_h, float distance) {
+void DoHeightmap(float px, float py, float angle, float h, float horizon, float scale_h, float distance, int iter) {
 	int sw = effu_w;
 	int sh = effu_h;
 
@@ -153,7 +153,7 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 			int c_ply = (int)ply & 1023;
 			int offset = (c_ply << 10) + c_plx;
 
-			int height_on_screen = (int)((h - heibuffer[offset]) / z * scale_h + horizon);
+			int height_on_screen = (int)(((h - (cos(time*0.001+z*0.001)*0.5)*iter * cos(sin(z*0.01))) - heibuffer[offset]) / z * scale_h + horizon);
 			VertLine(i, (int)height_on_screen, ybuffer[i], mapbuffer[offset], z);
 
 			if (height_on_screen < ybuffer[i]) ybuffer[i] = height_on_screen;
@@ -173,13 +173,13 @@ void RenderHeightmap() {
 
 	float angle = time *0.0002;
 
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < 3; i++) {
 		
-		DoHeightmap(time*0.08, time*0.06, angle,180, 50+cos(time*0.001)*25, 250, 2000);
+		DoHeightmap(250, 55.5, angle-i*0.001,180, 50, 250, 2000,i);
 	}
 
 	for (int i = 0; i < effu_w*effu_h; i++) {
-		pixels[i] -= 100;
+		pixels[i] /= 3;
 	}
 }
 
@@ -224,8 +224,6 @@ int main(int argc, char * argv[]) {
 		}
 	}
 
-	memset(pixels, 0, effu_w * effu_h * sizeof(Uint32));
-
 	SDL_Event e;
 	bool quit = false;
 
@@ -247,7 +245,7 @@ int main(int argc, char * argv[]) {
 
 		time = SDL_GetTicks();
 
-		SDL_UpdateTexture(scrtexture, NULL, pixels, effu_w * sizeof(Uint32));
+		memset(pixels, 0, effu_w * effu_h * sizeof(Uint32));
 
 		// draw
 		RenderHeightmap();
