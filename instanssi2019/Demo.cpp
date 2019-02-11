@@ -7,8 +7,8 @@ SDL_Renderer *ren;
 
 SDL_Texture *scrtexture;
 
-int effu_w = 640;
-int effu_h = 400;
+int effu_w = 320;
+int effu_h = 200;
 
 Uint32 *pixels = new Uint32[effu_w * effu_h];
 
@@ -69,22 +69,20 @@ SDL_Texture* LoadTexture(std::string file) {
 
 void VertLine(int x, int y1, int y2, Uint32 color, float z) {
 	if (x < 0 || x > effu_w) return;
-	if (y1 > effu_h || y2 > effu_h) return;
+	if (y1 < 0) y1 = 0;
+	if (y1 > effu_h) y1 = effu_h;
+	if (y2 > effu_h) y2 = effu_h;
 	float zz = 1.0 - z * 0.001;
 	if (zz < 0) zz = 0;
 
 	Uint8 *c = (Uint8*)&color;
 
-	c[0] *= zz;
-	c[1] *= zz;
-	c[2] *= zz;
-
 	Uint32 *cc = (Uint32*)c;
 
 	int ys = y2;
 	while (ys > y1) {
-		ys--;
-		pixels[ys * effu_w + x] += (*cc);
+		ys-=1;
+		pixels[ys * effu_w + x] = (*cc);
 	}
 
 }
@@ -148,15 +146,16 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 		float dx = (prx - plx) / sw;
 		float dy = (pry - ply) / sw;
 
-		for (int i = 0; i < sw; i++) {
+		for (int i = 0; i < sw; i+=1) {
 			int c_plx = (int)plx & 1023;
 			int c_ply = (int)ply & 1023;
 			int offset = (c_ply << 10) + c_plx;
 
-			int height_on_screen = (int)(((h - (cos(time*0.001+z*0.001)*0.5)*iter * cos(sin(z*0.01))) - heibuffer[offset]) / z * scale_h + horizon);
-			VertLine(i, (int)height_on_screen, ybuffer[i], mapbuffer[offset], z);
 
-			if (height_on_screen < ybuffer[i]) ybuffer[i] = height_on_screen;
+			int height_on_screen = (int)(((h  * cos(sin(z*0.001))) - heibuffer[offset]) / z * scale_h + horizon);
+			height_on_screen *= 2;
+			VertLine(i, (int)height_on_screen+200, ybuffer[i], mapbuffer[offset], z);
+
 
 			plx += dx;
 			ply += dy;
@@ -165,22 +164,18 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 		z += dz;
 		dz += 0.01;
 	}
+
+
 }
 
 void RenderHeightmap() {
-	SDL_SetRenderDrawColor(ren, 0, 0, 0, SDL_ALPHA_OPAQUE);
+	SDL_SetRenderDrawColor(ren, 255, 255, 255, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(ren);
 
-	float angle = time *0.0002;
+	float angle = 0;
 
-	for (int i = 0; i < 3; i++) {
-		
-		DoHeightmap(250, 55.5, angle-i*0.001,180, 50, 250, 2000,i);
-	}
 
-	for (int i = 0; i < effu_w*effu_h; i++) {
-		pixels[i] /= 3;
-	}
+	DoHeightmap(0, time*0.01, angle, -150, 20, 50, 1000, 0);
 }
 
 
@@ -190,7 +185,7 @@ int main(int argc, char * argv[]) {
 		return 1;
 	}
 
-	win = SDL_CreateWindow("instanssi 2019 demo", 100, 100, 1920, 1080, SDL_WINDOW_SHOWN);
+	win = SDL_CreateWindow("instanssi 2019 demo", 100, 100, 1280, 720, SDL_WINDOW_SHOWN);
 
 	if (win == nullptr) {
 		std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
@@ -243,7 +238,7 @@ int main(int argc, char * argv[]) {
 			}
 		}
 
-		time = SDL_GetTicks();
+		time = SDL_GetTicks()*4.;
 
 		memset(pixels, 0, effu_w * effu_h * sizeof(Uint32));
 

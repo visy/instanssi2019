@@ -1,0 +1,10 @@
+﻿  Demo.cpp
+d:\dev\instanssi2019\instanssi2019\demo.cpp(74): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\dev\instanssi2019\instanssi2019\demo.cpp(79): warning C4244: '*=': conversion from 'float' to 'Uint8', possible loss of data
+d:\dev\instanssi2019\instanssi2019\demo.cpp(80): warning C4244: '*=': conversion from 'float' to 'Uint8', possible loss of data
+d:\dev\instanssi2019\instanssi2019\demo.cpp(81): warning C4244: '*=': conversion from 'float' to 'Uint8', possible loss of data
+d:\dev\instanssi2019\instanssi2019\demo.cpp(139): warning C4305: 'initializing': truncation from 'double' to 'float'
+d:\dev\instanssi2019\instanssi2019\demo.cpp(168): warning C4305: '+=': truncation from 'double' to 'float'
+d:\dev\instanssi2019\instanssi2019\demo.cpp(180): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\dev\instanssi2019\instanssi2019\demo.cpp(243): warning C4244: '=': conversion from 'double' to 'Uint32', possible loss of data
+  instanssi2019.vcxproj -> D:\dev\instanssi2019\Debug\instanssi2019.exe
