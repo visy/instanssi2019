@@ -8,7 +8,7 @@ SDL_Renderer *ren;
 SDL_Texture *scrtexture;
 
 int effu_w = 320;
-int effu_h = 200;
+int effu_h = 400;
 
 Uint32 *pixels = new Uint32[effu_w * effu_h];
 
@@ -135,7 +135,9 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 
 	float dz = 0.001;
 	float z = 1;
-
+	plx = 0;
+	ply = 0;
+	int o = cos(time*0.0001)*150;
 	while (z < distance) {
 		plx = (-cos_a * z - sin_a * z) + px;
 		ply = (sin_a*z - cos_a * z) + py;
@@ -152,9 +154,9 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 			int offset = (c_ply << 10) + c_plx;
 
 
-			int height_on_screen = (int)(((h  * cos(sin(z*0.001))) - heibuffer[offset]) / z * scale_h + horizon);
+			int height_on_screen = (int)(((h  * cos(sin(z*0.01))) - heibuffer[offset]) / z * scale_h + horizon);
 			height_on_screen *= 2;
-			VertLine(i, (int)height_on_screen+200, ybuffer[i], mapbuffer[offset], z);
+			VertLine(i, (int)height_on_screen+effu_h, ybuffer[i], mapbuffer[offset], z);
 
 
 			plx += dx;
@@ -172,10 +174,10 @@ void RenderHeightmap() {
 	SDL_SetRenderDrawColor(ren, 255, 255, 255, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(ren);
 
-	float angle = 0;
+	float angle = time*0.0001;
 
 
-	DoHeightmap(0, time*0.01, angle, -150, 20, 50, 1000, 0);
+	DoHeightmap(time*0.02, time*0.01, angle, -150, 30, 50, 1500, 0);
 }
 
 
