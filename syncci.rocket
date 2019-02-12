@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rootElement>
+<tracks rows="10000" startRow="0" endRow="10000" rowsPerBeat="8"
+beatsPerMin="125">
+	<track name="clear.r" folded="0" muteKeyCount="0"
+color="ffb27474">
+		<key row="0" value="0.000000" interpolation="0" />
+	</track>
+	<track name="clear.g" folded="0" muteKeyCount="0"
+color="ffb28050">
+		<key row="0" value="0.000000" interpolation="0" />
+	</track>
+	<track name="clear.b" folded="0" muteKeyCount="0"
+color="ffa9b250">
+		<key row="0" value="255.000000" interpolation="0" />
+	</track>
+	<track name="cam.rot" folded="0" muteKeyCount="0"
+color="ff60b250">
+		<key row="0" value="0.000000" interpolation="0" />
+		<key row="152" value="0.000000" interpolation="2" />
+		<key row="312" value="5.000000" interpolation="0" />
+		<key row="505" value="5.000000" interpolation="2" />
+		<key row="624" value="7.000000" interpolation="0" />
+		<key row="910" value="7.000000" interpolation="2" />
+		<key row="1214" value="11.110025" interpolation="0" />
+	</track>
+	<track name="cam.dist" folded="0" muteKeyCount="0"
+color="ff4fb292">
+		<key row="0" value="0.000000" interpolation="1" />
+		<key row="488" value="1000.000000" interpolation="0" />
+		<key row="829" value="1000.000000" interpolation="2" />
+		<key row="1086" value="500.000000" interpolation="2" />
+		<key row="1157" value="2000.000000" interpolation="0" />
+		<key row="1295" value="2000.000000" interpolation="2" />
+		<key row="1601" value="0.000000" interpolation="0" />
+	</track>
+	<track name="cam.x" folded="0" muteKeyCount="0" color="ff4f71b2">
+		<key row="0" value="0.000000" interpolation="0" />
+		<key row="255" value="0.000000" interpolation="2" />
+		<key row="591" value="700.000000" interpolation="0" />
+		<key row="771" value="700.000000" interpolation="2" />
+		<key row="829" value="683.000000" interpolation="2" />
+		<key row="1102" value="500.000000" interpolation="1" />
+		<key row="1182" value="500.000000" interpolation="1" />
+		<key row="1663" value="1000.000000" interpolation="0" />
+	</track>
+	<track name="cam.y" folded="0" muteKeyCount="0" color="ff8850b2">
+		<key row="0" value="0.000000" interpolation="1" />
+		<key row="416" value="100.000000" interpolation="0" />
+		<key row="576" value="100.000000" interpolation="2" />
+		<key row="784" value="1000.000000" interpolation="0" />
+		<key row="808" value="1000.000000" interpolation="2" />
+		<key row="1086" value="0.000000" interpolation="1" />
+	</track>
+	<track name="cam.h" folded="0" muteKeyCount="0" color="ffb25091">
+		<key row="0" value="100.000000" interpolation="1" />
+		<key row="156" value="-100.000000" interpolation="0" />
+		<key row="670" value="-100.000000" interpolation="2" />
+		<key row="846" value="100.000000" interpolation="0" />
+		<key row="910" value="100.000000" interpolation="2" />
+		<key row="1086" value="-250.000000" interpolation="2" />
+	</track>
+	<track name="cam.hori" folded="0" muteKeyCount="0"
+color="ffb27474">
+		<key row="0" value="0.000000" interpolation="0" />
+		<key row="282" value="0.000000" interpolation="0" />
+	</track>
+	<track name="cam.scaleh" folded="0" muteKeyCount="0"
+color="ffb28050">
+		<key row="0" value="50.000000" interpolation="1" />
+		<key row="316" value="80.000000" interpolation="0" />
+	</track>
+</tracks>
+	</rootElement>

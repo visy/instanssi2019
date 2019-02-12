@@ -1,6 +1,16 @@
 ﻿#include <iostream>
 #include <string>
 #include "SDL2-2.0.9\include\SDL.h"
+#include "SDL2-2.0.9\include\bass.h"
+
+#pragma comment(lib, "ws2_32.lib")
+
+#include "sync.h"
+
+static const float bpm = 150.0f; /* beats per minute */
+static const int rpb = 8; /* rows per beat */
+static const double row_rate = (double(bpm) / 60) * rpb; /* rows per second */
+float row = 0;
 
 SDL_Window *win;
 SDL_Renderer *ren;
@@ -24,6 +34,68 @@ Uint32 heibuffer[1024 * 1024] = { 0 };
 Uint32 mapbuffer[1024 * 1024] = { 0 };
 
 Uint32 time = 0;
+
+int channu = -1;
+#ifndef SYNC_PLAYER
+bool should_save = false;	// whether to save tracks when done.
+							// don't save unless we actually connect.
+#endif
+
+sync_device *rocket;
+const struct sync_track *clear_r, *clear_g, *clear_b;
+const struct sync_track *cam_rot, *cam_dist, *cam_x, *cam_y;
+const struct sync_track *cam_h, *cam_hori, *cam_scaleh;
+
+float sync_rot;
+float sync_dist;
+float sync_x;
+float sync_y;
+float sync_h;
+float sync_hori;
+float sync_scaleh;
+
+float sync_c_r;
+float sync_c_g;
+float sync_c_b;
+
+static double bass_get_row(HSTREAM h)
+{
+	QWORD pos = BASS_ChannelGetPosition(h, BASS_POS_BYTE);
+	double time = BASS_ChannelBytes2Seconds(h, pos);
+	return time * row_rate;
+}
+
+#ifndef SYNC_PLAYER
+
+static void bass_pause(void *d, int flag)
+{
+	HSTREAM h = *((HSTREAM *)d);
+	if (flag)
+		BASS_ChannelPause(h);
+	else
+		BASS_ChannelPlay(h, false);
+}
+
+static void bass_set_row(void *d, int row)
+{
+	HSTREAM h = *((HSTREAM *)d);
+	QWORD pos = BASS_ChannelSeconds2Bytes(h, row / row_rate);
+	BASS_ChannelSetPosition(h, pos, BASS_POS_BYTE);
+}
+
+static int bass_is_playing(void *d)
+{
+	HSTREAM h = *((HSTREAM *)d);
+	return BASS_ChannelIsActive(h) == BASS_ACTIVE_PLAYING;
+}
+
+static struct sync_cb bass_cb = {
+	bass_pause,
+	bass_set_row,
+	bass_is_playing
+};
+
+#endif /* !defined(SYNC_PLAYER) */
 
 void DoQuit() {
 	delete[] pixels;
@@ -81,8 +153,9 @@ void VertLine(int x, int y1, int y2, Uint32 color, float z) {
 
 	int ys = y2;
 	while (ys > y1) {
-		ys-=1;
+		ys-=2;
 		pixels[ys * effu_w + x] = (*cc);
+		pixels[(ys-1) * effu_w + x] = (*cc);
 	}
 
 }
@@ -171,15 +244,11 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 }
 
 void RenderHeightmap() {
-	SDL_SetRenderDrawColor(ren, 255, 255, 255, SDL_ALPHA_OPAQUE);
+	SDL_SetRenderDrawColor(ren, sync_c_r, sync_c_g, sync_c_b, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(ren);
 
-	float angle = time*0.0001;
-
-
-	DoHeightmap(time*0.02, time*0.01, angle, -150, 30, 50, 1500, 0);
+	DoHeightmap(sync_x, sync_y, sync_rot, sync_h, sync_hori, sync_scaleh, sync_dist, 0);
 }
-
 
 int main(int argc, char * argv[]) {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -187,7 +256,7 @@ int main(int argc, char * argv[]) {
 		return 1;
 	}
 
-	win = SDL_CreateWindow("instanssi 2019 demo", 100, 100, 1280, 720, SDL_WINDOW_SHOWN);
+	win = SDL_CreateWindow("instanssi 2019 demo", 100, 100, 640, 480, SDL_WINDOW_SHOWN);
 
 	if (win == nullptr) {
 		std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
@@ -224,6 +293,33 @@ int main(int argc, char * argv[]) {
 	SDL_Event e;
 	bool quit = false;
 
+	rocket = sync_create_device("sync");
+
+#ifndef SYNC_PLAYER
+	sync_tcp_connect(rocket, "localhost", SYNC_DEFAULT_PORT);
+#endif
+
+	clear_r = sync_get_track(rocket, "clear.r");
+	clear_g = sync_get_track(rocket, "clear.g");
+	clear_b = sync_get_track(rocket, "clear.b");
+	cam_rot = sync_get_track(rocket, "cam.rot"),
+	cam_dist = sync_get_track(rocket, "cam.dist");
+	cam_x = sync_get_track(rocket, "cam.x");
+	cam_y = sync_get_track(rocket, "cam.y");
+	cam_h = sync_get_track(rocket, "cam.h");
+	cam_hori = sync_get_track(rocket, "cam.hori");
+	cam_scaleh = sync_get_track(rocket, "cam.scaleh");
+
+	HSTREAM stream;
+
+	/* init BASS */
+	BASS_Init(-1, 44100, 0, 0, 0);
+	stream = BASS_StreamCreateFile(false, "music.ogg", 0, 0, BASS_STREAM_PRESCAN);
+
+	/* let's roll! */
+	BASS_Start();
+	BASS_ChannelPlay(stream, false);
+
 	while (!quit) {
 		while (SDL_PollEvent(&e)) {
 			if (e.type == SDL_QUIT) {
@@ -240,7 +336,27 @@ int main(int argc, char * argv[]) {
 			}
 		}
 
-		time = SDL_GetTicks()*4.;
+		row = bass_get_row(stream);
+#ifndef SYNC_PLAYER
+		if (sync_update(rocket, (int)floor(row), &bass_cb, (void *)&stream)) {
+			if (sync_tcp_connect(rocket, "localhost", SYNC_DEFAULT_PORT) == 0)
+				should_save = true;
+		}
+#endif
+
+		sync_c_r = float(sync_get_val(clear_r, row));
+		sync_c_g = float(sync_get_val(clear_g, row));
+		sync_c_b = float(sync_get_val(clear_b, row));
+
+		sync_x = float(sync_get_val(cam_x, row));
+		sync_y = float(sync_get_val(cam_y, row));
+		sync_h = float(sync_get_val(cam_h, row));
+		sync_hori = float(sync_get_val(cam_hori, row));
+		sync_scaleh = float(sync_get_val(cam_scaleh, row));
+		sync_rot = float(sync_get_val(cam_rot, row));
+		sync_dist = float(sync_get_val(cam_dist, row));
+
+		time = row*row_rate*4;
 
 		memset(pixels, 0, effu_w * effu_h * sizeof(Uint32));
 
@@ -251,7 +367,18 @@ int main(int argc, char * argv[]) {
 
 		SDL_RenderCopy(ren, scrtexture, NULL, NULL);
 		SDL_RenderPresent(ren);
+
+		BASS_Update(0); /* decrease the chance of missing vsync */
 	}
+
+#ifndef SYNC_PLAYER
+	if (should_save)		//don't clobber if user just ran it then hit Esc
+		sync_save_tracks(rocket);
+#endif
+	sync_destroy_device(rocket);
+
+	BASS_StreamFree(stream);
+	BASS_Free();
 
 	DoQuit();
 	SDL_Quit();
