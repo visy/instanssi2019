@@ -247,6 +247,8 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 }
 
 void RenderHeightmap() {
+	SDL_SetTextureBlendMode(scrtexture, SDL_BLENDMODE_NONE);
+
 	SDL_SetRenderDrawColor(ren, sync_c_r, sync_c_g, sync_c_b, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(ren);
 
