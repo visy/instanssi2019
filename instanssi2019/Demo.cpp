@@ -16,22 +16,24 @@ SDL_Window *win;
 SDL_Renderer *ren;
 
 SDL_Texture *scrtexture;
+SDL_Texture *reversecross_texture;
 
 int effu_w = 320;
 int effu_h = 400;
 
 Uint32 *pixels = new Uint32[effu_w * effu_h];
 
-SDL_Surface *hei;
-SDL_Surface *map;
+SDL_Surface *colormap_image;
+SDL_Surface *heightmap_image;
+SDL_Surface *reversecross_image;
 
 float plx;
 float ply;
 float prx;
 float pry;
 int ybuffer[1024] = { 0 };
-Uint32 heibuffer[1024 * 1024] = { 0 };
-Uint32 mapbuffer[1024 * 1024] = { 0 };
+Uint32 colormap_buffer[1024 * 1024] = { 0 };
+Uint32 heightmap_buffer[1024 * 1024] = { 0 };
 
 Uint32 time = 0;
 
@@ -42,9 +44,12 @@ bool should_save = false;	// whether to save tracks when done.
 #endif
 
 sync_device *rocket;
+const struct sync_track *scene;
 const struct sync_track *clear_r, *clear_g, *clear_b;
 const struct sync_track *cam_rot, *cam_dist, *cam_x, *cam_y;
 const struct sync_track *cam_h, *cam_hori, *cam_scaleh;
+
+int sync_scene;
 
 float sync_rot;
 float sync_dist;
@@ -227,9 +232,9 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 			int offset = (c_ply << 10) + c_plx;
 
 
-			int height_on_screen = (int)(((h  * cos(sin(z*0.01))) - heibuffer[offset]) / z * scale_h + horizon);
+			int height_on_screen = (int)(((h  * cos(sin(z*0.01))) - colormap_buffer[offset]) / z * scale_h + horizon);
 			height_on_screen *= 2;
-			VertLine(i, (int)height_on_screen+effu_h, ybuffer[i], mapbuffer[offset], z);
+			VertLine(i, (int)height_on_screen+effu_h, ybuffer[i], heightmap_buffer[offset], z);
 
 
 			plx += dx;
@@ -239,8 +244,6 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 		z += dz;
 		dz += 0.01;
 	}
-
-
 }
 
 void RenderHeightmap() {
@@ -248,6 +251,25 @@ void RenderHeightmap() {
 	SDL_RenderClear(ren);
 
 	DoHeightmap(sync_x, sync_y, sync_rot, sync_h, sync_hori, sync_scaleh, sync_dist, 0);
+}
+
+void RenderKefrensCross() {
+
+	SDL_Rect dstrect;
+
+	SDL_SetRenderTarget(ren, scrtexture);
+	SDL_SetTextureBlendMode(scrtexture,SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(ren, sync_c_r, sync_c_g, sync_c_b, SDL_ALPHA_OPAQUE);
+	SDL_RenderClear(ren);
+	for (int i = 0; i < 300; i++) {
+		dstrect.x = 640 / 2 - 64 + 100 * sin(sync_dist + 2.0f *  3.141592f * i / 100) * cos(sync_rot + 2.0f *  3.141592f * i / 128);
+		dstrect.y = 480 / 2 - 64 + i - 150;
+		dstrect.w = 128;
+		dstrect.h = 128;
+		SDL_RenderCopy(ren, reversecross_texture, NULL, &dstrect);
+	}
+	SDL_SetRenderTarget(ren, NULL);
+	SDL_RenderPresent(ren);
 }
 
 int main(int argc, char * argv[]) {
@@ -273,20 +295,22 @@ int main(int argc, char * argv[]) {
 
 	scrtexture = SDL_CreateTexture(ren, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, effu_w, effu_h);
 
-	hei = LoadSurface("d1.bmp");
-	map = LoadSurface("c1.bmp");
+	colormap_image = LoadSurface("d1.bmp");
+	heightmap_image = LoadSurface("c1.bmp");
+	reversecross_image = LoadSurface("badtaste.bmp");
+	reversecross_texture = SDL_CreateTextureFromSurface(ren, reversecross_image);
+	if (colormap_image == NULL || heightmap_image == NULL) return 1;
 
-	if (hei == NULL || map == NULL) return 1;
-
+	// height map values inserted to array
 	for (int y = 0; y < 1024; y++) {
 		for (int x = 0; x < 1024; x++) {
-			Uint32 heightpixel = GetPixel(hei, x, y);
+			Uint32 heightpixel = GetPixel(colormap_image, x, y);
 			Uint8 *colors = (Uint8*)&heightpixel;
 
 			Uint8 heightvalue = luma(colors[2], colors[1], colors[0]);
-			heibuffer[y * 1024 + x] = heightvalue;
+			colormap_buffer[y * 1024 + x] = heightvalue;
 
-			mapbuffer[y * 1024 + x] = GetPixel(map, x, y);
+			heightmap_buffer[y * 1024 + x] = GetPixel(heightmap_image, x, y);
 		}
 	}
 
@@ -299,6 +323,7 @@ int main(int argc, char * argv[]) {
 	sync_tcp_connect(rocket, "localhost", SYNC_DEFAULT_PORT);
 #endif
 
+	scene = sync_get_track(rocket, "scene");
 	clear_r = sync_get_track(rocket, "clear.r");
 	clear_g = sync_get_track(rocket, "clear.g");
 	clear_b = sync_get_track(rocket, "clear.b");
@@ -337,6 +362,8 @@ int main(int argc, char * argv[]) {
 		}
 
 		row = bass_get_row(stream);
+
+
 #ifndef SYNC_PLAYER
 		if (sync_update(rocket, (int)floor(row), &bass_cb, (void *)&stream)) {
 			if (sync_tcp_connect(rocket, "localhost", SYNC_DEFAULT_PORT) == 0)
@@ -360,13 +387,22 @@ int main(int argc, char * argv[]) {
 
 		memset(pixels, 0, effu_w * effu_h * sizeof(Uint32));
 
-		// draw
-		RenderHeightmap();
+		int sync_scene = (int)sync_get_val(scene, row);
+		// draw scene
+		switch (sync_scene) {
+		case 0:
+			RenderHeightmap();
+			SDL_UpdateTexture(scrtexture, NULL, pixels, effu_w * sizeof(Uint32));
+			SDL_RenderCopy(ren, scrtexture, NULL, NULL);
+			SDL_RenderPresent(ren);
+			break;
+		case 1:
+			RenderKefrensCross();
+			SDL_RenderCopy(ren, scrtexture, NULL, NULL);
+			SDL_RenderPresent(ren);
+			break;
 
-		SDL_UpdateTexture(scrtexture, NULL, pixels, effu_w * sizeof(Uint32));
-
-		SDL_RenderCopy(ren, scrtexture, NULL, NULL);
-		SDL_RenderPresent(ren);
+		}
 
 		BASS_Update(0); /* decrease the chance of missing vsync */
 	}
