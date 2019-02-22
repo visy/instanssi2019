@@ -254,12 +254,11 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 int cursor_x = 0;
 int cursor_y = 0;
 
-void DoFont() {
-	SDL_SetTextureBlendMode(scrtexture, SDL_BLENDMODE_BLEND);
-	const char *text = "Performing_forbidden_rituals_outside";
-
-	cursor_x = 100;
-	cursor_y = 100;
+void DoText(const char* text, int x, int y) {
+	cursor_x = x;
+	cursor_y = y;
+	int off = -4;
+	SDL_SetTextureColorMod(font_texture, 0, 0, 0);
 
 	for (int i = 0; i < strlen(text); i++) {
 		char letter = text[i];
@@ -271,12 +270,41 @@ void DoFont() {
 		SDL_Rect dstrect;
 		dstrect.x = cursor_x;
 		dstrect.y = cursor_y;
-		dstrect.w = srcrect.w*2;
-		dstrect.h = srcrect.h*2;
+		dstrect.w = srcrect.w * 2;
+		dstrect.h = srcrect.h * 2;
 		SDL_RenderCopy(ren, font_texture, &srcrect, &dstrect);
 
-		cursor_x += srcrect.w*2;
+		cursor_x += srcrect.w * 2;
 	}
+
+	cursor_x = x;
+	SDL_SetTextureColorMod(font_texture, 255, 255, 255);
+
+	for (int i = 0; i < strlen(text); i++) {
+		char letter = text[i];
+		int font_y = ((int)letter - 33) / 16;
+		int font_x = ((int)letter - 33) % 16;
+
+		SDL_Rect srcrect = font_bb[(font_y * 16) + font_x];
+
+		SDL_Rect dstrect;
+		dstrect.x = cursor_x+off;
+		dstrect.y = cursor_y+off;
+		dstrect.w = srcrect.w * 2;
+		dstrect.h = srcrect.h * 2;
+		SDL_RenderCopy(ren, font_texture, &srcrect, &dstrect);
+
+		cursor_x += srcrect.w * 2;
+	}
+
+}
+
+void DoFont() {
+	SDL_SetTextureBlendMode(scrtexture, SDL_BLENDMODE_BLEND);
+	const char *text = "performing_forbidden_rituals_outside";
+	DoText(text,100,100);
+	const char *text2 = "experiments_with_dark_arts_beyond...";
+	DoText(text2, 100, 100+56);
 
 }
 
@@ -335,7 +363,7 @@ int main(int argc, char * argv[]) {
 	heightmap_image = LoadSurface("c1.bmp");
 	reversecross_image = LoadSurface("badtaste.bmp");
 	font_image = LoadSurface("font.bmp");
-	SDL_SetColorKey(font_image, SDL_TRUE, SDL_MapRGB(font_image->format, 0xff, 0xff, 0xff));
+	SDL_SetColorKey(font_image, SDL_TRUE, SDL_MapRGB(font_image->format, 0x0, 0x0, 0x0));
 	reversecross_texture = SDL_CreateTextureFromSurface(ren, reversecross_image);
 	font_texture = SDL_CreateTextureFromSurface(ren, font_image);
 

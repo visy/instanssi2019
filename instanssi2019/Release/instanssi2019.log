@@ -1,6 +1,18 @@
-﻿  Generating code
-  2 of 128 functions ( 1.6%) were compiled, the rest were copied from previous compilation.
+﻿  Demo.cpp
+d:\dev\instanssi2019\instanssi2019\demo.cpp(157): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\dev\instanssi2019\instanssi2019\demo.cpp(219): warning C4305: 'initializing': truncation from 'double' to 'float'
+d:\dev\instanssi2019\instanssi2019\demo.cpp(223): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+d:\dev\instanssi2019\instanssi2019\demo.cpp(250): warning C4305: '+=': truncation from 'double' to 'float'
+d:\dev\instanssi2019\instanssi2019\demo.cpp(263): warning C4018: '<': signed/unsigned mismatch
+d:\dev\instanssi2019\instanssi2019\demo.cpp(283): warning C4018: '<': signed/unsigned mismatch
+d:\dev\instanssi2019\instanssi2019\demo.cpp(314): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
+d:\dev\instanssi2019\instanssi2019\demo.cpp(326): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
+d:\dev\instanssi2019\instanssi2019\demo.cpp(329): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\dev\instanssi2019\instanssi2019\demo.cpp(445): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\dev\instanssi2019\instanssi2019\demo.cpp(467): warning C4244: '=': conversion from 'double' to 'Uint32', possible loss of data
+  Generating code
+  1 of 129 functions ( 0.8%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   instanssi2019.vcxproj -> D:\dev\instanssi2019\Release\instanssi2019.exe
