@@ -1,13 +1,5 @@
-﻿  Demo.cpp
-d:\dev\instanssi2019\instanssi2019\demo.cpp(147): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\dev\instanssi2019\instanssi2019\demo.cpp(209): warning C4305: 'initializing': truncation from 'double' to 'float'
-d:\dev\instanssi2019\instanssi2019\demo.cpp(213): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-d:\dev\instanssi2019\instanssi2019\demo.cpp(240): warning C4305: '+=': truncation from 'double' to 'float'
-d:\dev\instanssi2019\instanssi2019\demo.cpp(247): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
-d:\dev\instanssi2019\instanssi2019\demo.cpp(339): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\dev\instanssi2019\instanssi2019\demo.cpp(359): warning C4244: '=': conversion from 'double' to 'Uint32', possible loss of data
-  Generating code
-  3 of 126 functions ( 2.4%) were compiled, the rest were copied from previous compilation.
+﻿  Generating code
+  2 of 128 functions ( 1.6%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code

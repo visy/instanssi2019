@@ -7,6 +7,7 @@
 
 #include "sync.h"
 
+
 static const float bpm = 150.0f; /* beats per minute */
 static const int rpb = 8; /* rows per beat */
 static const double row_rate = (double(bpm) / 60) * rpb; /* rows per second */
@@ -17,6 +18,7 @@ SDL_Renderer *ren;
 
 SDL_Texture *scrtexture;
 SDL_Texture *reversecross_texture;
+SDL_Texture *font_texture;
 
 int effu_w = 320;
 int effu_h = 400;
@@ -26,6 +28,9 @@ Uint32 *pixels = new Uint32[effu_w * effu_h];
 SDL_Surface *colormap_image;
 SDL_Surface *heightmap_image;
 SDL_Surface *reversecross_image;
+SDL_Surface *font_image;
+
+SDL_Rect font_bb[15 * 16] = {};
 
 float plx;
 float ply;
@@ -246,6 +251,35 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 	}
 }
 
+int cursor_x = 0;
+int cursor_y = 0;
+
+void DoFont() {
+	SDL_SetTextureBlendMode(scrtexture, SDL_BLENDMODE_BLEND);
+	const char *text = "Performing_forbidden_rituals_outside";
+
+	cursor_x = 100;
+	cursor_y = 100;
+
+	for (int i = 0; i < strlen(text); i++) {
+		char letter = text[i];
+		int font_y = ((int)letter - 33) / 16;
+		int font_x = ((int)letter - 33) % 16;
+
+		SDL_Rect srcrect = font_bb[(font_y * 16) + font_x];
+
+		SDL_Rect dstrect;
+		dstrect.x = cursor_x;
+		dstrect.y = cursor_y;
+		dstrect.w = srcrect.w*2;
+		dstrect.h = srcrect.h*2;
+		SDL_RenderCopy(ren, font_texture, &srcrect, &dstrect);
+
+		cursor_x += srcrect.w*2;
+	}
+
+}
+
 void RenderHeightmap() {
 	SDL_SetTextureBlendMode(scrtexture, SDL_BLENDMODE_NONE);
 
@@ -280,7 +314,7 @@ int main(int argc, char * argv[]) {
 		return 1;
 	}
 
-	win = SDL_CreateWindow("instanssi 2019 demo", 100, 100, 640, 480, SDL_WINDOW_SHOWN);
+	win = SDL_CreateWindow("instanssi 2019 demo", 100, 100, 1920, 1080, SDL_WINDOW_SHOWN);
 
 	if (win == nullptr) {
 		std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
@@ -300,8 +334,25 @@ int main(int argc, char * argv[]) {
 	colormap_image = LoadSurface("d1.bmp");
 	heightmap_image = LoadSurface("c1.bmp");
 	reversecross_image = LoadSurface("badtaste.bmp");
+	font_image = LoadSurface("font.bmp");
+	SDL_SetColorKey(font_image, SDL_TRUE, SDL_MapRGB(font_image->format, 0xff, 0xff, 0xff));
 	reversecross_texture = SDL_CreateTextureFromSurface(ren, reversecross_image);
+	font_texture = SDL_CreateTextureFromSurface(ren, font_image);
+
 	if (colormap_image == NULL || heightmap_image == NULL) return 1;
+
+	// font bounding boxes
+	for (int y = 0; y < 15; y++) {
+		for (int x = 0; x < 16; x++) {
+			SDL_Rect rect;
+			rect.x = x * 61-(x>0?1:0);
+			rect.y = y * 50;
+			rect.w = 25-(y<5?0:4);
+			rect.h = 32;
+
+			font_bb[(y * 16) + x] = rect;
+		}
+	}
 
 	// height map values inserted to array
 	for (int y = 0; y < 1024; y++) {
@@ -396,6 +447,7 @@ int main(int argc, char * argv[]) {
 			RenderHeightmap();
 			SDL_UpdateTexture(scrtexture, NULL, pixels, effu_w * sizeof(Uint32));
 			SDL_RenderCopy(ren, scrtexture, NULL, NULL);
+			DoFont();
 			SDL_RenderPresent(ren);
 			break;
 		case 1:
