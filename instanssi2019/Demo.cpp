@@ -1,4 +1,7 @@
-﻿#include <iostream>
+﻿
+#define _CRT_SECURE_NO_WARNINGS 1
+
+#include <iostream>
 #include <string>
 #include "SDL2-2.0.9\include\SDL.h"
 #include "SDL2-2.0.9\include\bass.h"
@@ -18,6 +21,7 @@ SDL_Renderer *ren;
 
 SDL_Texture *scrtexture;
 SDL_Texture *reversecross_texture;
+SDL_Texture *house_texture;
 SDL_Texture *font_texture;
 
 int effu_w = 320;
@@ -29,8 +33,11 @@ SDL_Surface *colormap_image;
 SDL_Surface *heightmap_image;
 SDL_Surface *reversecross_image;
 SDL_Surface *font_image;
+SDL_Surface *house_image;
 
 SDL_Rect font_bb[15 * 16] = {};
+
+unsigned char house_mask[320 * 100] = {255};
 
 float plx;
 float ply;
@@ -336,6 +343,35 @@ void RenderKefrensCross() {
 	SDL_RenderPresent(ren);
 }
 
+void RenderHouse() {
+	SDL_SetTextureBlendMode(scrtexture, SDL_BLENDMODE_NONE);
+	SDL_SetRenderDrawColor(ren, sync_c_r, sync_c_g, sync_c_b, SDL_ALPHA_OPAQUE);
+	SDL_RenderClear(ren);
+
+	for (int y = 0; y < 100; y++) {
+		for (int x = 1; x < 320; x++) {
+			int xs = x * 1+((effu_w-2)/32);
+			int ys = y * 3;
+			pixels[ys * effu_w + xs] = house_mask[y * 320 + x]*0x00111111;
+			pixels[(ys+1) * effu_w + xs] = house_mask[y * 320 + x] * 0x00111111;
+		}
+	}
+
+	SDL_UpdateTexture(scrtexture, NULL, pixels, effu_w * sizeof(Uint32));
+	SDL_RenderCopy(ren, scrtexture, NULL, NULL);
+
+	SDL_SetTextureBlendMode(scrtexture, SDL_BLENDMODE_BLEND);
+
+	SDL_SetTextureAlphaMod(house_texture, 200);
+	SDL_Rect dstrect;
+
+	dstrect.x = effu_w / 8;
+	dstrect.y = 1;
+	dstrect.w = effu_w*6;
+	dstrect.h = effu_h*2;
+	SDL_RenderCopy(ren, house_texture, NULL, &dstrect);
+}
+
 int main(int argc, char * argv[]) {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
@@ -363,9 +399,29 @@ int main(int argc, char * argv[]) {
 	heightmap_image = LoadSurface("c1.bmp");
 	reversecross_image = LoadSurface("badtaste.bmp");
 	font_image = LoadSurface("font.bmp");
+	house_image = LoadSurface("house.bmp");
+
 	SDL_SetColorKey(font_image, SDL_TRUE, SDL_MapRGB(font_image->format, 0x0, 0x0, 0x0));
 	reversecross_texture = SDL_CreateTextureFromSurface(ren, reversecross_image);
 	font_texture = SDL_CreateTextureFromSurface(ren, font_image);
+
+	// house mask
+	for (int y2 = 0; y2 < 2; y2++) {
+		for (int x2 = 0; x2 < 1; x2++) {
+			for (int y = 0; y < 100; y++) {
+				for (int x = 0; x < 320; x++) {
+					Uint32 pixel = GetPixel(house_image, (x / 2) + x2, y + y2);
+					if (pixel == 0x00000000) {
+						house_mask[y * 320 + x] -= 32;
+					}
+				}
+			}
+		}
+	}
+
+	SDL_SetColorKey(house_image, SDL_TRUE, SDL_MapRGB(font_image->format, 0xff, 0xff, 0xff));
+
+	house_texture = SDL_CreateTextureFromSurface(ren, house_image);
 
 	if (colormap_image == NULL || heightmap_image == NULL) return 1;
 
@@ -481,6 +537,10 @@ int main(int argc, char * argv[]) {
 		case 1:
 			RenderKefrensCross();
 			SDL_RenderCopy(ren, scrtexture, NULL, NULL);
+			SDL_RenderPresent(ren);
+			break;
+		case 2:
+			RenderHouse();
 			SDL_RenderPresent(ren);
 			break;
 
