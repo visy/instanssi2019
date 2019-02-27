@@ -20,20 +20,25 @@ SDL_Window *win;
 SDL_Renderer *ren;
 
 SDL_Texture *scrtexture;
+SDL_Texture *kuviotexture;
+
 SDL_Texture *reversecross_texture;
 SDL_Texture *house_texture;
 SDL_Texture *font_texture;
+SDL_Texture *paita_texture;
 
 int effu_w = 320;
 int effu_h = 400;
 
 Uint32 *pixels = new Uint32[effu_w * effu_h];
+Uint32 *pixelskuvio = new Uint32[160 * 100];
 
 SDL_Surface *colormap_image;
 SDL_Surface *heightmap_image;
 SDL_Surface *reversecross_image;
 SDL_Surface *font_image;
 SDL_Surface *house_image;
+SDL_Surface *paita_image;
 
 SDL_Rect font_bb[15 * 16] = {};
 
@@ -116,6 +121,7 @@ static struct sync_cb bass_cb = {
 
 void DoQuit() {
 	delete[] pixels;
+	delete[] pixelskuvio;
 	SDL_DestroyTexture(scrtexture);
 	SDL_DestroyRenderer(ren);
 	SDL_DestroyWindow(win);
@@ -372,6 +378,69 @@ void RenderHouse() {
 	SDL_RenderCopy(ren, house_texture, NULL, &dstrect);
 }
 
+int gw = 160;
+int gh = 100;
+
+int g2w = 320;
+int g2h = 400;
+
+int nSeed = 5323;
+
+int prng() {
+	nSeed = (8253729 * nSeed + 2396403);
+	return nSeed % 32767;
+}
+
+int paitacount = 0;
+int r_paita = 1337;
+
+void RenderShirt() {
+	SDL_SetRenderTarget(ren, scrtexture);
+
+	paitacount++;
+	
+	if (paitacount > 30) {
+		r_paita = prng();
+		paitacount = 0;
+	}
+	for (int y = 0; y < gh; y++) {
+		for (int x = 0; x < gw; x += 1) {
+			float pe = 0.05;
+			int col = (int)((0xFF * cos(r_paita + y * pe + tan(x*100.01))*sin((x*abs(cos(r_paita + 300)) - 40)*pe)*tan(x*0.01 + cos(x*r_paita*0.01 + y * 0.1)*r_paita*0.00009*cos(tan(x*0.2 + r_paita)))));
+			int dd = abs(gh / 2 - y);
+			if (dd > 20) col -= (dd - 20) * 0x50;
+			if (col < 0xFF) pixelskuvio[y*gw + x] = 0x00000000;
+			else pixelskuvio[y*gw + x] = 0xFFFFFFFF;
+
+			//if (col > 0xFF) g.pixels[(y*gw)+(x+1)] = 0xAAAAAAAA;
+
+		}
+	}
+	for (int y = 0; y < gh; y++) {
+		for (int x = 0; x < gw / 2; x++) {
+			pixelskuvio[y*gw + x] = pixelskuvio[(y*gw) + (gw - 1 - x)];
+		}
+	}
+	
+	SDL_UpdateTexture(kuviotexture, NULL, pixelskuvio, 160 * sizeof(Uint32));
+	//SDL_SetTextureAlphaMod(paita_texture, 255);
+	SDL_Rect dstrect;
+
+	dstrect.x = effu_w*1.9;
+	dstrect.y = effu_h*0.9;
+	dstrect.w = 160 * 3;
+	dstrect.h = 100*3;
+	SDL_RenderCopy(ren, kuviotexture, NULL, &dstrect);
+	SDL_SetTextureBlendMode(paita_texture, SDL_BLENDMODE_BLEND);
+
+	SDL_SetTextureAlphaMod(paita_texture, 255);
+	SDL_RenderCopy(ren, paita_texture, NULL, NULL);
+
+	SDL_SetRenderTarget(ren, NULL);
+
+}
+
+
 int main(int argc, char * argv[]) {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
@@ -394,16 +463,20 @@ int main(int argc, char * argv[]) {
 	}
 
 	scrtexture = SDL_CreateTexture(ren, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, effu_w, effu_h);
+	kuviotexture = SDL_CreateTexture(ren, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, 160, 100);
 
 	colormap_image = LoadSurface("d1.bmp");
 	heightmap_image = LoadSurface("c1.bmp");
 	reversecross_image = LoadSurface("badtaste.bmp");
 	font_image = LoadSurface("font.bmp");
 	house_image = LoadSurface("house.bmp");
+	paita_image = LoadSurface("paita.bmp");
 
 	SDL_SetColorKey(font_image, SDL_TRUE, SDL_MapRGB(font_image->format, 0x0, 0x0, 0x0));
+	SDL_SetColorKey(paita_image, SDL_TRUE, SDL_MapRGB(font_image->format, 0xff, 0xff, 0x0));
 	reversecross_texture = SDL_CreateTextureFromSurface(ren, reversecross_image);
 	font_texture = SDL_CreateTextureFromSurface(ren, font_image);
+	paita_texture = SDL_CreateTextureFromSurface(ren, paita_image);
 
 	// house mask
 	for (int y2 = 0; y2 < 2; y2++) {
@@ -523,6 +596,7 @@ int main(int argc, char * argv[]) {
 		time = row*row_rate*4;
 
 		memset(pixels, 0, effu_w * effu_h * sizeof(Uint32));
+		memset(pixelskuvio, 0, 160 * 100 * sizeof(Uint32));
 
 		int sync_scene = (int)sync_get_val(scene, row);
 		// draw scene
@@ -541,6 +615,11 @@ int main(int argc, char * argv[]) {
 			break;
 		case 2:
 			RenderHouse();
+			SDL_RenderPresent(ren);
+			break;
+		case 3:
+			RenderShirt();
+			SDL_RenderCopy(ren, scrtexture, NULL, NULL);
 			SDL_RenderPresent(ren);
 			break;
 
