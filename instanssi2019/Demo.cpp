@@ -62,7 +62,7 @@ bool should_save = false;	// whether to save tracks when done.
 
 sync_device *rocket;
 const struct sync_track *scene;
-const struct sync_track *clear_r, *clear_g, *clear_b;
+const struct sync_track *clear_r, *clear_g, *clear_b, *clear_a;
 const struct sync_track *cam_rot, *cam_dist, *cam_x, *cam_y;
 const struct sync_track *cam_h, *cam_hori, *cam_scaleh;
 
@@ -79,6 +79,7 @@ float sync_scaleh;
 float sync_c_r;
 float sync_c_g;
 float sync_c_b;
+float sync_c_a;
 
 static double bass_get_row(HSTREAM h)
 {
@@ -314,11 +315,14 @@ void DoText(const char* text, int x, int y) {
 
 void DoFont() {
 	SDL_SetTextureBlendMode(scrtexture, SDL_BLENDMODE_BLEND);
-	const char *text = "performing_forbidden_rituals_outside";
-	DoText(text,100,100);
-	const char *text2 = "experiments_with_dark_arts_beyond...";
-	DoText(text2, 100, 100+56);
 
+	int ti = (int)sync_c_a;
+
+	if (ti == 1) DoText("______Quadtrip+Ivory+Jumalauta______", 100, 1080/2-32);
+	if (ti == 2) DoText("PURGATORIUm____________", 100, 1080 / 2 - 32);
+
+
+//	if (ti == 1) DoText("performing_forbidden_rituals_outside", 100, 100);
 }
 
 void RenderHeightmap() {
@@ -396,13 +400,11 @@ int r_paita = 1337;
 
 void RenderShirt() {
 	SDL_SetRenderTarget(ren, scrtexture);
+	SDL_SetRenderDrawColor(ren, 0, 0, 0, SDL_ALPHA_OPAQUE);
+	SDL_RenderClear(ren);
 
-	paitacount++;
-	
-	if (paitacount > 30) {
-		r_paita = prng();
-		paitacount = 0;
-	}
+	r_paita = (int)sync_h;
+
 	for (int y = 0; y < gh; y++) {
 		for (int x = 0; x < gw; x += 1) {
 			float pe = 0.05;
@@ -426,18 +428,29 @@ void RenderShirt() {
 	//SDL_SetTextureAlphaMod(paita_texture, 255);
 	SDL_Rect dstrect;
 
-	dstrect.x = effu_w*1.9;
+	dstrect.x = effu_w*1.62;
 	dstrect.y = effu_h*0.9;
-	dstrect.w = 160 * 3;
-	dstrect.h = 100*3;
+	dstrect.w = 160 * 4;
+	dstrect.h = 100*2.7;
 	SDL_RenderCopy(ren, kuviotexture, NULL, &dstrect);
 	SDL_SetTextureBlendMode(paita_texture, SDL_BLENDMODE_BLEND);
 
 	SDL_SetTextureAlphaMod(paita_texture, 255);
 	SDL_RenderCopy(ren, paita_texture, NULL, NULL);
 
-	SDL_SetRenderTarget(ren, NULL);
+	dstrect.x = 0;
+	dstrect.y = 0;
+	dstrect.w = 1920;
+	dstrect.h = 1080;
+	SDL_SetRenderTarget(ren, scrtexture);
 
+	SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_MOD);
+	SDL_SetRenderDrawColor(ren, sync_c_r, sync_c_g, sync_c_b, 0);
+
+	SDL_RenderFillRect(ren, &dstrect);
+
+	SDL_SetRenderTarget(ren, NULL);
+	SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_NONE);
 }
 
 
@@ -537,6 +550,8 @@ int main(int argc, char * argv[]) {
 	clear_r = sync_get_track(rocket, "clear.r");
 	clear_g = sync_get_track(rocket, "clear.g");
 	clear_b = sync_get_track(rocket, "clear.b");
+	clear_a = sync_get_track(rocket, "clear.a");
+
 	cam_rot = sync_get_track(rocket, "cam.rot"),
 	cam_dist = sync_get_track(rocket, "cam.dist");
 	cam_x = sync_get_track(rocket, "cam.x");
@@ -584,6 +599,7 @@ int main(int argc, char * argv[]) {
 		sync_c_r = float(sync_get_val(clear_r, row));
 		sync_c_g = float(sync_get_val(clear_g, row));
 		sync_c_b = float(sync_get_val(clear_b, row));
+		sync_c_a = float(sync_get_val(clear_a, row));
 
 		sync_x = float(sync_get_val(cam_x, row));
 		sync_y = float(sync_get_val(cam_y, row));
@@ -605,25 +621,23 @@ int main(int argc, char * argv[]) {
 			RenderHeightmap();
 			SDL_UpdateTexture(scrtexture, NULL, pixels, effu_w * sizeof(Uint32));
 			SDL_RenderCopy(ren, scrtexture, NULL, NULL);
-			DoFont();
-			SDL_RenderPresent(ren);
 			break;
 		case 1:
 			RenderKefrensCross();
 			SDL_RenderCopy(ren, scrtexture, NULL, NULL);
-			SDL_RenderPresent(ren);
 			break;
 		case 2:
 			RenderHouse();
-			SDL_RenderPresent(ren);
 			break;
 		case 3:
 			RenderShirt();
-			SDL_RenderCopy(ren, scrtexture, NULL, NULL);
-			SDL_RenderPresent(ren);
+//			SDL_RenderCopy(ren, scrtexture, NULL, NULL);
 			break;
-
 		}
+
+		DoFont();
+
+		SDL_RenderPresent(ren);
 
 		BASS_Update(0); /* decrease the chance of missing vsync */
 	}
