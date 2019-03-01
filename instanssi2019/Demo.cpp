@@ -42,7 +42,7 @@ SDL_Surface *paita_image;
 
 SDL_Rect font_bb[15 * 16] = {};
 
-unsigned char house_mask[320 * 100] = {255};
+unsigned char house_mask[320 * 100] = {0};
 
 float plx;
 float ply;
@@ -321,6 +321,9 @@ void DoFont() {
 	if (ti == 1) DoText("______Quadtrip+Ivory+Jumalauta______", 100, 1080/2-32);
 	if (ti == 2) DoText("PURGATORIUm____________", 100, 1080 / 2 - 32);
 
+	if (ti == 32)DoText("______Leave_your_life_behind..._____", 100, 1080-100);
+	if (ti == 33)DoText("______This_mortal_realm_of_man._____", 100, 1080 - 100);
+	if (ti == 34)DoText("______It_is_time_for_judgement._____", 100, 1080 - 100);
 
 //	if (ti == 1) DoText("performing_forbidden_rituals_outside", 100, 100);
 }
@@ -354,16 +357,26 @@ void RenderKefrensCross() {
 }
 
 void RenderHouse() {
+	SDL_SetRenderTarget(ren, NULL);
 	SDL_SetTextureBlendMode(scrtexture, SDL_BLENDMODE_NONE);
 	SDL_SetRenderDrawColor(ren, sync_c_r, sync_c_g, sync_c_b, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(ren);
 
 	for (int y = 0; y < 100; y++) {
 		for (int x = 1; x < 320; x++) {
-			int xs = x * 1+((effu_w-2)/32);
+			int xs = x+((effu_w-2)/32)-10;
 			int ys = y * 3;
-			pixels[ys * effu_w + xs] = house_mask[y * 320 + x]*0x00111111;
-			pixels[(ys+1) * effu_w + xs] = house_mask[y * 320 + x] * 0x00111111;
+			pixels[(ys * effu_w) + xs] = house_mask[(y * 320) + x-10]*0x00111111;
+			pixels[((ys+1) * effu_w) + xs] = house_mask[(y * 320) + x-10] * 0x00111111;
+		}
+	}
+
+	for (int y = 100; y < 130; y++) {
+		for (int x = 1; x < 320; x++) {
+			int xs = x + ((effu_w - 2) / 32)-10;
+			int ys = y * 3;
+			xs += cos(time*0.001+y*0.5)*(6-abs(cos(y*0.1)*3));
+			pixels[ys * effu_w + xs] = house_mask[(((230-y)-30) * 320) + x - 10] * 0x00040033;
 		}
 	}
 
@@ -372,7 +385,7 @@ void RenderHouse() {
 
 	SDL_SetTextureBlendMode(scrtexture, SDL_BLENDMODE_BLEND);
 
-	SDL_SetTextureAlphaMod(house_texture, 200);
+	SDL_SetTextureAlphaMod(house_texture, 180);
 	SDL_Rect dstrect;
 
 	dstrect.x = effu_w / 8;
