@@ -6,10 +6,13 @@
 #include "SDL2-2.0.9\include\SDL.h"
 #include "SDL2-2.0.9\include\bass.h"
 
+#include <sys/types.h>
+
 #pragma comment(lib, "ws2_32.lib")
 
 #include "sync.h"
 
+#define bcopy(s1, s2, n) memmove((s2), (s1), (n))
 
 static const float bpm = 150.0f; /* beats per minute */
 static const int rpb = 8; /* rows per beat */
@@ -313,6 +316,45 @@ void DoText(const char* text, int x, int y) {
 
 }
 
+
+int nSeed = 5323;
+
+int prng() {
+	nSeed = (8253729 * nSeed + 2396403);
+	return nSeed % 32767;
+}
+
+
+void DoTextG(const char* text, int x, int y) {
+	cursor_x = x;
+	cursor_y = y;
+
+	cursor_x = x;
+
+	for (int i = 0; i < strlen(text); i++) {
+		char letter = text[i];
+		int font_y = ((int)letter - 33) / 16;
+		int font_x = ((int)letter - 33) % 16;
+
+		SDL_Rect srcrect = font_bb[(font_y * 16) + font_x];
+
+		int wg = prng() % 16;
+		int hg = prng() % 16;
+		int ef = abs(255*cos((i*0.01+1)*0.1+time*0.0001+cos(i*0.01+y*0.01+time*0.0001)*20));
+		SDL_SetTextureColorMod(font_texture, (abs(64-ef)+1), (abs(256-ef)+1), (abs(64-ef)+1));
+
+		SDL_Rect dstrect;
+		dstrect.x = cursor_x;
+		dstrect.y = cursor_y;
+		dstrect.w = srcrect.w * 2+wg;
+		dstrect.h = srcrect.h * 2+hg;
+		SDL_RenderCopy(ren, font_texture, &srcrect, &dstrect);
+
+		cursor_x += srcrect.w * 2;
+	}
+
+}
+
 void DoFont() {
 	SDL_SetTextureBlendMode(scrtexture, SDL_BLENDMODE_BLEND);
 
@@ -326,6 +368,20 @@ void DoFont() {
 	if (ti == 34)DoText("______It_is_time_for_judgement._____", 100, 1080 - 100);
 
 //	if (ti == 1) DoText("performing_forbidden_rituals_outside", 100, 100);
+}
+
+char teksti[39] = "                                      ";
+
+void DoFontOverlay() {
+	SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_BLEND);
+
+	for (int i = 0; i < 39; i++) {
+		teksti[i] = 65 + (prng() % 32);
+	}
+
+	for (int y = 0; y < 30; y++) {
+		DoTextG(teksti, 0, y*35);
+	}
 }
 
 void RenderHeightmap() {
@@ -401,13 +457,6 @@ int gh = 100;
 int g2w = 320;
 int g2h = 400;
 
-int nSeed = 5323;
-
-int prng() {
-	nSeed = (8253729 * nSeed + 2396403);
-	return nSeed % 32767;
-}
-
 int paitacount = 0;
 int r_paita = 1337;
 
@@ -466,6 +515,7 @@ void RenderShirt() {
 	SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_NONE);
 }
 
+int litecounter = 0;
 
 int main(int argc, char * argv[]) {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -474,6 +524,7 @@ int main(int argc, char * argv[]) {
 	}
 
 	win = SDL_CreateWindow("instanssi 2019 demo", 100, 100, 1920, 1080, SDL_WINDOW_SHOWN);
+	//SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
 	if (win == nullptr) {
 		std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
@@ -550,6 +601,8 @@ int main(int argc, char * argv[]) {
 		}
 	}
 
+
+
 	SDL_Event e;
 	bool quit = false;
 
@@ -578,6 +631,49 @@ int main(int argc, char * argv[]) {
 	/* init BASS */
 	BASS_Init(-1, 44100, 0, 0, 0);
 	stream = BASS_StreamCreateFile(false, "music.ogg", 0, 0, BASS_STREAM_PRESCAN);
+
+	int sock, n;
+	unsigned int length;
+	struct sockaddr_in server;
+	struct hostent *hp;
+	                            //lightnum  //color
+	char buffer[151] = { 0x1, 0x1,0x00,0x00,  0xff,0x00,0x00,
+							0x1,1, 0, 0,0,0,
+							0x1,2, 0, 0,0,0,
+							0x1,3, 0, 0,0,0,
+							0x1,4, 0, 0,0,0,
+							0x1,5, 0, 0,0,0,
+							0x1,6, 0, 0,0,0,
+							0x1,7, 0, 0,0,0,
+							0x1,8, 0, 0,0,0,
+							0x1,9, 0, 0,0,0,
+							0x1,10, 0, 0,0,0,
+							0x1,11, 0, 0,0,0,
+							0x1,12, 0, 0,0,0,
+							0x1,13, 0, 0,0,0,
+							0x1,14, 0, 0,0,0,
+							0x1,15, 0, 0,0,0,
+							0x1,16, 0, 0,0,0,
+							0x1,17, 0, 0,0,0,
+							0x1,18, 0, 0,0,0,
+							0x1,19, 0, 0,0,0,
+							0x1,20, 0, 0,0,0,
+							0x1,21, 0, 0,0,0,
+							0x1,22, 0, 0,0,0,
+							0x1,23, 0, 0,0,0,
+							0x1,24, 0, 0,0,0
+	};
+
+	hp = gethostbyname("valot.party");
+	sock = socket(AF_INET, SOCK_DGRAM, 0);
+
+	server.sin_family = AF_INET;
+	bcopy((char *)hp->h_addr,
+		(char *)&server.sin_addr,
+		hp->h_length);
+	server.sin_port = htons(atoi("9909"));
+
+	length = sizeof(struct sockaddr_in);
 
 	/* let's roll! */
 	BASS_Start();
@@ -650,9 +746,18 @@ int main(int argc, char * argv[]) {
 
 		DoFont();
 
+//		DoFontOverlay();
+
 		SDL_RenderPresent(ren);
 
 		BASS_Update(0); /* decrease the chance of missing vsync */
+		for (int i = 0; i < 151; i += 6) {
+			buffer[4 + i] = 128 + sin(time*0.005 + i * 0.1) * 128;
+			buffer[5 + i] = 128 + sin(time*0.005 + i * 0.1) * 128;
+			buffer[6 + i] = 128 + sin(time*0.005 + i * 0.1) * 128;
+		}
+
+		n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
 	}
 
 #ifndef SYNC_PLAYER

@@ -79,8 +79,10 @@ color="ff4f71b2">
 	<track name="cam.dist" folded="0" muteKeyCount="0"
 color="ff8850b2">
 		<key row="320" value="0.000000" interpolation="2" />
-		<key row="560" value="1000.000000" interpolation="0" />
-		<key row="593" value="1000.000000" interpolation="1" />
+		<key row="560" value="200.000000" interpolation="0" />
+		<key row="593" value="200.000000" interpolation="1" />
+		<key row="684" value="150.000000" interpolation="3" />
+		<key row="712" value="500.000000" interpolation="2" />
 		<key row="959" value="0.000000" interpolation="0" />
 	</track>
 	<track name="cam.x" folded="0" muteKeyCount="0" color="ffb25091">
@@ -109,7 +111,7 @@ color="ff8850b2">
 		<key row="232" value="10022.000000" interpolation="0" />
 		<key row="240" value="10022.000000" interpolation="3" />
 		<key row="312" value="9986.000000" interpolation="0" />
-		<key row="320" value="30.000000" interpolation="0" />
+		<key row="320" value="1.000000" interpolation="0" />
 	</track>
 	<track name="cam.hori" folded="0" muteKeyCount="0"
 color="ffa9b250">
