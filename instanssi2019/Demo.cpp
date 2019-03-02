@@ -119,7 +119,7 @@ static void bass_set_row(void *d, int row)
 	QWORD pos = BASS_ChannelSeconds2Bytes(h, row / row_rate);
 	BASS_ChannelSetPosition(h, pos, BASS_POS_BYTE);
 }
-
+    
 static int bass_is_playing(void *d)
 {
 	HSTREAM h = *((HSTREAM *)d);
@@ -905,10 +905,10 @@ int main(int argc, char * argv[]) {
 							0x1,23, 0, 0,0,0,
 							0x1,24, 0, 0,0,0
 	};
-
+#ifdef VALOT
 	hp = gethostbyname("valot.party");
 	sock = socket(AF_INET, SOCK_DGRAM, 0);
-
+	int removeme;
 	server.sin_family = AF_INET;
 	bcopy((char *)hp->h_addr,
 		(char *)&server.sin_addr,
@@ -916,7 +916,7 @@ int main(int argc, char * argv[]) {
 	server.sin_port = htons(atoi("9909"));
 
 	length = sizeof(struct sockaddr_in);
-
+#endif
 	/* let's roll! */
 	BASS_Start();
 	BASS_ChannelPlay(stream, false);
@@ -1006,8 +1006,9 @@ int main(int argc, char * argv[]) {
 			buffer[5 + i] = 128 + sin(time*0.005 + i * 0.1) * 128;
 			buffer[6 + i] = 128 + sin(time*0.005 + i * 0.1) * 128;
 		}
-
+#ifdef VALOT
 		n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
+#endif
 	}
 
 #ifndef SYNC_PLAYER
