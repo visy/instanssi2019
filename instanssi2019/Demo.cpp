@@ -474,9 +474,9 @@ void RenderKefrensCross() {
 	SDL_RenderClear(ren);
 	dstrect.w = 128;
 	dstrect.h = 128;
-	for (int i = 0; i < 100; i += 2) {
-		dstrect.x = 320 / 2 - 64 + 100 * sin(sync_dist + 2.0f *  3.141592f * i / 100) * cos(sync_rot + 2.0f *  3.141592f * i / 128);
-		dstrect.y = 200 / 2 - 64 + i - 80 + sin(sync_dist*0.321f + i * 0.05f) * 30;
+	for (int i = 0; i < 98; i += 2) {
+		dstrect.x = 320 / 2 - 64 + 100 * sin(sync_dist + 2.0f *  3.141592f * i / 200) * cos(sync_rot + 2.0f *  3.141592f * i / 128);
+		dstrect.y = 200 / 2 - 64 + i - 90 + sin(sync_dist*0.321f + i * 0.05f) * 20;
 		SDL_SetTextureColorMod(reversecross_texture, 255+i/2-50, 255+i-100, 255+i-100);
 		SDL_RenderCopy(ren, reversecross_texture, NULL, &dstrect);
 	}
@@ -517,7 +517,6 @@ void RenderKefrensCross() {
 		}
 
 	}
-	set_pixel(ren, 100, 100, 32, 123, 200, 32);
 	SDL_SetRenderTarget(ren, NULL);
 }
 
