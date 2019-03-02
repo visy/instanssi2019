@@ -488,7 +488,7 @@ void RenderKefrensCross() {
 
 	SDL_RenderReadPixels(ren, NULL, SDL_PIXELFORMAT_ARGB8888, sshot->pixels, sshot->pitch);
 
-	for (int x = 16; x < 320 - 16; x++) {
+	for (int x = 0; x < 320 - 16; x++) {
 		auto selected = GetPixel(sshot, x, 0);
 		for (int y = 0; y < 200; y++) {
 			auto pixel = GetPixel(sshot, x, y);
@@ -620,6 +620,7 @@ void SphereEffect() {
 	//SDL_FreeSurface(sshot);
 }
 
+void RenderHouse();
 
 void FireEffect() {
 	SDL_SetRenderTarget(ren, rtttexture);
@@ -683,7 +684,20 @@ void FireEffect() {
 	dstrect2.y = 0;
 
 	if (sync_hori <= 1.0f) {
-		if (sync_hori == 0.0f) {
+		if (sync_hori < 0.0f) {
+			Uint8 r0, g0, b0, a0;
+			for (int y = 0; y < 100; y+=2) {
+				for (int x = 0; x < 160; x++) {
+					auto pixel0 = GetPixel(house_image, x, y);
+					r0 = (pixel0 >> 16) & 255;
+					g0 = (pixel0 >> 8) & 255;
+					b0 = (pixel0 & 255);
+					if (r0 + g0 + b0 < 3) {
+						set_pixel(ren, x+50, y+50, y,y,y,255);
+					}
+				}
+			}
+		} else if (sync_hori == 0.0f) {
 			SDL_RenderCopy(ren, devil1_texture, NULL, &dstrect1);
 		}
 		else if (sync_hori == 1.0f) {
