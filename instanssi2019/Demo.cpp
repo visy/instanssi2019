@@ -50,7 +50,7 @@ SDL_Texture *devil2_texture;
 int effu_w = 320;
 int effu_h = 200;
 
-Uint32 *pixels = new Uint32[effu_w * (effu_h+50)];
+Uint32 *pixels = new Uint32[effu_w * (effu_h + 50)];
 Uint32 *pixelskuvio = new Uint32[160 * 100];
 
 SDL_Surface *colormap_image;
@@ -65,7 +65,7 @@ SDL_Surface *devil2_image;
 
 SDL_Rect font_bb[15 * 16] = {};
 
-unsigned char house_mask[320 * 100] = {0};
+unsigned char house_mask[320 * 100] = { 0 };
 
 float plx;
 float ply;
@@ -128,7 +128,7 @@ static void bass_set_row(void *d, int row)
 	QWORD pos = BASS_ChannelSeconds2Bytes(h, row / row_rate);
 	BASS_ChannelSetPosition(h, pos, BASS_POS_BYTE);
 }
-    
+
 static int bass_is_playing(void *d)
 {
 	HSTREAM h = *((HSTREAM *)d);
@@ -396,14 +396,14 @@ void DoTextG(const char* text, int x, int y) {
 
 		int wg = prng() % 16;
 		int hg = prng() % 16;
-		int ef = abs(255*cos((i*0.01+1)*0.1+time*0.0001+cos(i*0.01+y*0.01+time*0.0001)*20));
-		SDL_SetTextureColorMod(font_texture, (abs(64-ef)+1), (abs(256-ef)+1), (abs(64-ef)+1));
+		int ef = abs(255 * cos((i*0.01 + 1)*0.1 + time * 0.0001 + cos(i*0.01 + y * 0.01 + time * 0.0001) * 20));
+		SDL_SetTextureColorMod(font_texture, (abs(64 - ef) + 1), (abs(256 - ef) + 1), (abs(64 - ef) + 1));
 
 		SDL_Rect dstrect;
 		dstrect.x = cursor_x;
 		dstrect.y = cursor_y;
-		dstrect.w = srcrect.w * 2+wg;
-		dstrect.h = srcrect.h * 2+hg;
+		dstrect.w = srcrect.w * 2 + wg;
+		dstrect.h = srcrect.h * 2 + hg;
 		SDL_RenderCopy(ren, font_texture, &srcrect, &dstrect);
 
 		cursor_x += srcrect.w * 2;
@@ -424,7 +424,7 @@ void DoFont() {
 	if (ti == 18) DoText("_____We_are_stuck_here_together____", 100, 1080 / 2 - 32);
 
 
-	if (ti == 32)DoText("______Leave_your_life_behind..._____", 100, 1080-100);
+	if (ti == 32)DoText("______Leave_your_life_behind..._____", 100, 1080 - 100);
 	if (ti == 33)DoText("______This_mortal_realm_of_man._____", 100, 1080 - 100);
 	if (ti == 34)DoText("______It_is_time_for_judgement._____", 100, 1080 - 100);
 
@@ -441,7 +441,7 @@ void DoFontOverlay() {
 	}
 
 	for (int y = 0; y < 30; y++) {
-		DoTextG(teksti, 0, y*35);
+		DoTextG(teksti, 0, y * 35);
 	}
 }
 
@@ -459,7 +459,7 @@ void RenderKefrensCross() {
 
 
 	SDL_SetRenderTarget(ren, NULL);
-//	SDL_SetTextureBlendMode(rtttexture, SDL_BLENDMODE_BLEND);
+	//	SDL_SetTextureBlendMode(rtttexture, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(ren, sync_c_r, sync_c_g, sync_c_b, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(ren);
 	SDL_Rect dstrect;
@@ -580,7 +580,7 @@ void SphereEffect() {
 	float ax = sin(sync_x) * 256.0f;
 	float ay = cos(sync_y) * 256.0f;
 	flick++;
-	for (int y = 0; y < 200; y+=1) {
+	for (int y = 0; y < 200; y += 1) {
 		for (int x = 0; x < 320; x++) {
 			Vector4 uv = mainImage(Vector2{ (float)x + sin(sync_rot)*100.0f,(float)y + cos(sync_rot*0.8f)*100.0f }, Vector2{ 320.0f,200.0f });
 			/*
@@ -625,32 +625,32 @@ void FireEffect() {
 	if (sshot == NULL)
 		sshot = SDL_CreateRGBSurface(0, w, h, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
 
-		for (int x = 0; x < 320; x++) {
+	for (int x = 0; x < 320; x++) {
 
-			Uint8 r, g, b, a;
-			r = (Uint8)rand();
-			g = (Uint8)rand() >> 2;
-			b = (Uint8)rand() >> 3;
-			if (rand() & 3 == 0) {
-				r = 255;
-				g = 255;
-				b = 255;
-			}
-			set_pixel(ren, x, 199, r, g, b, 255);
+		Uint8 r, g, b, a;
+		r = (Uint8)rand();
+		g = (Uint8)rand() >> 2;
+		b = (Uint8)rand() >> 3;
+		if (rand() & 3 == 0) {
+			r = 255;
+			g = 255;
+			b = 255;
 		}
+		set_pixel(ren, x, 199, r, g, b, 255);
+	}
 
 	SDL_RenderReadPixels(ren, NULL, SDL_PIXELFORMAT_ARGB8888, sshot->pixels, sshot->pitch);
 
 	flick++;
 	for (int y = 0; y < 199; y++) {
-		for (int x = flick & 1; x < 319; x+=2) {
+		for (int x = flick & 1; x < 319; x += 2) {
 			/*
 			auto pixel = GetPixel(sshot, x, y);
 			Uint8 r, g, b, a;
 			SDL_GetRGBA(pixel, sshot->format, &r, &g, &b, &a);
 			*/
 			Uint8 r, g, b, a;
-			auto pixel = GetPixel(sshot, x + 1,min(y+ (rand() & 1 + 1),199) );
+			auto pixel = GetPixel(sshot, x + 1, min(y + (rand() & 1 + 1), 199));
 
 			r = pixel >> 16 & 255;
 			g = pixel >> 8 & 255;
@@ -683,19 +683,19 @@ void RenderHouse() {
 
 	for (int y = 0; y < 100; y++) {
 		for (int x = 1; x < 320; x++) {
-			int xs = x+((effu_w-2)/32)-10;
+			int xs = x + ((effu_w - 2) / 32) - 10;
 			int ys = y * 1.3;
-			pixels[(ys * effu_w) + xs] = house_mask[(y * 320) + x-10]*0x00111111;
-			pixels[((ys+1) * effu_w) + xs] = house_mask[(y * 320) + x-10] * 0x00111111;
+			pixels[(ys * effu_w) + xs] = house_mask[(y * 320) + x - 10] * 0x00111111;
+			pixels[((ys + 1) * effu_w) + xs] = house_mask[(y * 320) + x - 10] * 0x00111111;
 		}
 	}
 
 	for (int y = 100; y < 130; y++) {
 		for (int x = 1; x < 320; x++) {
-			int xs = x + ((effu_w - 2) / 32)-10;
+			int xs = x + ((effu_w - 2) / 32) - 10;
 			int ys = y * 1.3;
-			xs += cos(time*0.001+y*0.5)*(6-abs(cos(y*0.1)*3));
-			pixels[ys * effu_w + xs] = house_mask[(((230-y)-30) * 320) + x - 10] * 0x00040033;
+			xs += cos(time*0.001 + y * 0.5)*(6 - abs(cos(y*0.1) * 3));
+			pixels[ys * effu_w + xs] = house_mask[(((230 - y) - 30) * 320) + x - 10] * 0x00040033;
 		}
 	}
 
@@ -709,8 +709,8 @@ void RenderHouse() {
 
 	dstrect.x = effu_w / 7;
 	dstrect.y = 1;
-	dstrect.w = effu_w*6;
-	dstrect.h = effu_h*3.5;
+	dstrect.w = effu_w * 6;
+	dstrect.h = effu_h * 3.5;
 	SDL_RenderCopy(ren, house_texture, NULL, &dstrect);
 }
 
@@ -909,7 +909,7 @@ int main(int argc, char * argv[]) {
 	unsigned int length;
 	struct sockaddr_in server;
 	struct hostent *hp;
-	                            //lightnum  //color
+	//lightnum  //color
 	char buffer[151] = { 0x1, 0x1,0x00,0x00,  0xff,0x00,0x00,
 							0x1,1, 0, 0,0,0,
 							0x1,2, 0, 0,0,0,
