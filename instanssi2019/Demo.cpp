@@ -40,6 +40,9 @@ SDL_Texture *reversecross_texture;
 SDL_Texture *house_texture;
 SDL_Texture *font_texture;
 SDL_Texture *paita_texture;
+SDL_Texture *texturerepeat_texture;
+SDL_Texture *devil1_texture;
+SDL_Texture *devil2_texture;
 
 int effu_w = 320;
 int effu_h = 400;
@@ -53,6 +56,9 @@ SDL_Surface *reversecross_image;
 SDL_Surface *font_image;
 SDL_Surface *house_image;
 SDL_Surface *paita_image;
+SDL_Surface *texturerepeat_image;
+SDL_Surface *devil1_image;
+SDL_Surface *devil2_image;
 
 SDL_Rect font_bb[15 * 16] = {};
 
@@ -442,12 +448,12 @@ void RenderHeightmap() {
 SDL_Surface *sshot;
 void RenderKefrensCross() {
 
-	SDL_Rect dstrect;
 
 	SDL_SetRenderTarget(ren, scrtexture);
 	SDL_SetTextureBlendMode(scrtexture, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(ren, sync_c_r, sync_c_g, sync_c_b, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(ren);
+	SDL_Rect dstrect;
 	dstrect.w = 128;
 	dstrect.h = 128;
 	for (int i = 0; i < 100; i += 2) {
@@ -576,8 +582,8 @@ void SphereEffect() {
 			b = (Uint8)(uv.z * 256.0f) & 255;
 			int d = uv.z * 128.0f;
 			int d2 = uv.z * 133.0f;
-			int d3 = uv.z * 144.0f;
-			auto pixel = GetPixel(reversecross_image, r, g);
+			int d3 = uv.z * 114.0f;
+			auto pixel = GetPixel(texturerepeat_image, r, g);
 
 			r = pixel >> 16 & 255;
 			g = pixel >> 8 & 255;
@@ -599,7 +605,6 @@ void SphereEffect() {
 
 void FireEffect() {
 
-	SDL_Rect dstrect;
 
 	SDL_SetRenderTarget(ren, scrtexture);
 	SDL_SetTextureBlendMode(scrtexture, SDL_BLENDMODE_BLEND);
@@ -622,7 +627,7 @@ void FireEffect() {
 			}
 			set_pixel(ren, x, 199, r, g, b, 255);
 		}
-	
+
 	SDL_RenderReadPixels(ren, NULL, SDL_PIXELFORMAT_ARGB8888, sshot->pixels, sshot->pitch);
 
 	flick++;
@@ -648,6 +653,13 @@ void FireEffect() {
 			set_pixel(ren, x, y, r, g, b, 255);
 		}
 	}
+
+	SDL_Rect dstrect;
+	dstrect.w = 320;
+	dstrect.h = 200;
+	dstrect.x = 0;
+	dstrect.y = 0;
+	SDL_RenderCopy(ren, devil1_texture, NULL, &dstrect);
 	SDL_SetRenderTarget(ren, NULL);
 	SDL_RenderPresent(ren);
 	//SDL_FreeSurface(sshot);
@@ -789,13 +801,21 @@ int main(int argc, char * argv[]) {
 	font_image = LoadSurface("font.bmp");
 	house_image = LoadSurface("house.bmp");
 	paita_image = LoadSurface("paita.bmp");
+	texturerepeat_image = LoadSurface("textureloop.bmp");
+	devil1_image = LoadSurface("smear1.bmp");
+	devil2_image = LoadSurface("smear2.bmp");
 
 	SDL_SetColorKey(font_image, SDL_TRUE, SDL_MapRGB(font_image->format, 0x0, 0x0, 0x0));
 	SDL_SetColorKey(paita_image, SDL_TRUE, SDL_MapRGB(font_image->format, 0xff, 0xff, 0x0));
 	SDL_SetColorKey(reversecross_image, SDL_TRUE, SDL_MapRGB(reversecross_image->format, 0xff, 0xff, 0xff));
+	SDL_SetColorKey(devil1_image, SDL_TRUE, SDL_MapRGB(reversecross_image->format, 0x00, 0x00, 0x00));
+	SDL_SetColorKey(devil2_image, SDL_TRUE, SDL_MapRGB(reversecross_image->format, 0x00, 0x00, 0x00));
 	reversecross_texture = SDL_CreateTextureFromSurface(ren, reversecross_image);
 	font_texture = SDL_CreateTextureFromSurface(ren, font_image);
 	paita_texture = SDL_CreateTextureFromSurface(ren, paita_image);
+	texturerepeat_texture = SDL_CreateTextureFromSurface(ren, texturerepeat_image);
+	devil1_texture = SDL_CreateTextureFromSurface(ren, devil1_image);
+	devil2_texture = SDL_CreateTextureFromSurface(ren, devil2_image);
 
 	// house mask
 	for (int y2 = 0; y2 < 2; y2++) {
@@ -874,6 +894,7 @@ int main(int argc, char * argv[]) {
 	BASS_Init(-1, 44100, 0, 0, 0);
 	stream = BASS_StreamCreateFile(false, "music.ogg", 0, 0, BASS_STREAM_PRESCAN);
 
+#ifdef VALOT
 	int sock, n;
 	unsigned int length;
 	struct sockaddr_in server;
@@ -905,7 +926,6 @@ int main(int argc, char * argv[]) {
 							0x1,23, 0, 0,0,0,
 							0x1,24, 0, 0,0,0
 	};
-#ifdef VALOT
 	hp = gethostbyname("valot.party");
 	sock = socket(AF_INET, SOCK_DGRAM, 0);
 	int removeme;
@@ -1001,12 +1021,12 @@ int main(int argc, char * argv[]) {
 		SDL_RenderPresent(ren);
 
 		BASS_Update(0); /* decrease the chance of missing vsync */
+#ifdef VALOT
 		for (int i = 0; i < 151; i += 6) {
 			buffer[4 + i] = 128 + sin(time*0.005 + i * 0.1) * 128;
 			buffer[5 + i] = 128 + sin(time*0.005 + i * 0.1) * 128;
 			buffer[6 + i] = 128 + sin(time*0.005 + i * 0.1) * 128;
 		}
-#ifdef VALOT
 		n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
 #endif
 	}
