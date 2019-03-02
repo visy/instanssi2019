@@ -397,7 +397,7 @@ void DoTextG(const char* text, int x, int y) {
 		int wg = prng() % 16;
 		int hg = prng() % 16;
 		int ef = abs(255 * cos((i*0.01 + 1)*0.1 + time * 0.0001 + cos(i*0.01 + y * 0.01 + time * 0.0001) * 20));
-		SDL_SetTextureColorMod(font_texture, (abs(64 - ef) + 1), (abs(256 - ef) + 1), (abs(64 - ef) + 1));
+		SDL_SetTextureColorMod(font_texture, (abs(64 - ef) + 1), (abs(92 - ef) + 1), (abs(64 - ef) + 1));
 
 		SDL_Rect dstrect;
 		dstrect.x = cursor_x;
@@ -615,8 +615,6 @@ void SphereEffect() {
 
 
 void FireEffect() {
-
-
 	SDL_SetRenderTarget(ren, rtttexture);
 	SDL_SetTextureBlendMode(rtttexture, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(ren, sync_c_r, sync_c_g, sync_c_b, SDL_ALPHA_OPAQUE);
@@ -665,12 +663,59 @@ void FireEffect() {
 		}
 	}
 
-	SDL_Rect dstrect;
-	dstrect.w = 320;
-	dstrect.h = 200;
-	dstrect.x = 0;
-	dstrect.y = 0;
-	SDL_RenderCopy(ren, devil1_texture, NULL, &dstrect);
+	SDL_Rect dstrect1;
+	dstrect1.w = 320;
+	dstrect1.h = 200;
+	dstrect1.x = 0;
+	dstrect1.y = 0;
+
+	SDL_Rect dstrect2;
+	dstrect2.w = 320;
+	dstrect2.h = 200;
+	dstrect2.x = 0;
+	dstrect2.y = 0;
+
+	if (sync_hori <= 1.0f) {
+		if (sync_hori == 0.0f) {
+			SDL_RenderCopy(ren, devil1_texture, NULL, &dstrect1);
+		}
+		else if (sync_hori == 1.0f) {
+			SDL_RenderCopy(ren, devil2_texture, NULL, &dstrect2);
+		}
+		else {
+			Uint8 r0, g0, b0, a0;
+			Uint8 r1, g1, b1, a1;
+			for (int y = 0; y < 200; y++) {
+				for (int x = 0; x < 320; x++) {
+					auto pixel0 = GetPixel(devil1_image, x, y);
+					r0 = (pixel0 >> 16) & 255;
+					g0 = (pixel0 >> 8) & 255;
+					b0 = (pixel0 & 255);
+					auto pixel1 = GetPixel(devil2_image, x, y);
+					r1 = (pixel1 >> 16) & 255;
+					g1 = (pixel1 >> 8) & 255;
+					b1 = (pixel1 & 255);
+
+					float r = min(max(sync_hori + (rand() % 10) / 100.0f,0.0f),1.0f);
+					// outoa
+					r0 *= (1.0f - r);
+					g0 *= (1.0f - r);
+					b0 *= (1.0f - r);
+					r1 *= r;
+					g1 *= r;
+					b1 *= r;
+
+					r0 = r0 + r1;
+					g0 = g0 + g1;
+					b0 = b0 + b1;
+					a0 = 255;
+					if (r0 + g0 + b0 > 3) {
+						set_pixel(ren, x, y, r0, g0, b0, 255);
+					}
+				}
+			}
+		}
+	}
 	SDL_SetRenderTarget(ren, NULL);
 	//SDL_FreeSurface(sshot);
 }
@@ -786,8 +831,8 @@ int main(int argc, char * argv[]) {
 		return 1;
 	}
 
-	win = SDL_CreateWindow("instanssi 2019 demo", 100, 100, 1920, 1080, SDL_WINDOW_SHOWN);
-	//SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	win = SDL_CreateWindow("instanssi 2019 demo", 8, 8, 1920, 1080, SDL_WINDOW_SHOWN);
+	//	SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
 	if (win == nullptr) {
 		std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
@@ -821,6 +866,7 @@ int main(int argc, char * argv[]) {
 	SDL_SetColorKey(reversecross_image, SDL_TRUE, SDL_MapRGB(reversecross_image->format, 0xff, 0xff, 0xff));
 	SDL_SetColorKey(devil1_image, SDL_TRUE, SDL_MapRGB(reversecross_image->format, 0x00, 0x00, 0x00));
 	SDL_SetColorKey(devil2_image, SDL_TRUE, SDL_MapRGB(reversecross_image->format, 0x00, 0x00, 0x00));
+
 	reversecross_texture = SDL_CreateTextureFromSurface(ren, reversecross_image);
 	font_texture = SDL_CreateTextureFromSurface(ren, font_image);
 	paita_texture = SDL_CreateTextureFromSurface(ren, paita_image);
@@ -1023,10 +1069,13 @@ int main(int argc, char * argv[]) {
 			FireEffect();
 			SDL_RenderCopy(ren, rtttexture, NULL, NULL);
 			break;
+		case 6:
+			DoFontOverlay();
+			break;
+
+
 		}
 		DoFont();
-
-		//		DoFontOverlay();
 
 		SDL_RenderPresent(ren);
 
@@ -1041,7 +1090,7 @@ int main(int argc, char * argv[]) {
 #ifdef VALOT
 			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
 #endif
-		}
+			}
 
 		if (sync_scene == 1) {
 			for (int i = 0; i < 151 - 6; i += 6) {
@@ -1052,7 +1101,7 @@ int main(int argc, char * argv[]) {
 #ifdef VALOT
 			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
 #endif
-		}
+			}
 
 
 		if (sync_scene == 3) {
@@ -1064,7 +1113,7 @@ int main(int argc, char * argv[]) {
 #ifdef VALOT
 			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
 #endif
-		}
+			}
 
 		if (sync_scene == 4) {
 			for (int i = 0; i < 151; i += 6) {
@@ -1075,7 +1124,7 @@ int main(int argc, char * argv[]) {
 #ifdef VALOT
 			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
 #endif
-		}
+			}
 
 		if (sync_scene == 5) {
 			for (int i = 0; i < 151 - 6; i += 6) {
@@ -1086,10 +1135,21 @@ int main(int argc, char * argv[]) {
 #ifdef VALOT
 			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
 #endif
+			}
+
+		if (sync_scene == 6) {
+			for (int i = 0; i < 151 - 6; i += 6) {
+				buffer[4 + i] = 128 + sin(i*100. + time * 0.1) * 127;
+				buffer[5 + i] = 255;
+				buffer[6 + i] = 255;
+			}
+#ifdef VALOT
+			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
+#endif
+			}
+
+
 		}
-
-
-	}
 
 #ifndef SYNC_PLAYER
 	if (should_save)		//don't clobber if user just ran it then hit Esc
@@ -1104,4 +1164,4 @@ int main(int argc, char * argv[]) {
 	SDL_Quit();
 
 	return 0;
-}
+		}

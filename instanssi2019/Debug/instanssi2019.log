@@ -39,15 +39,18 @@ c:\dev\instanssi2019\instanssi2019\demo.cpp(918): warning C4838: conversion from
 c:\dev\instanssi2019\instanssi2019\demo.cpp(918): warning C4309: 'initializing': truncation of constant value
 c:\dev\instanssi2019\instanssi2019\demo.cpp(951): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 c:\dev\instanssi2019\instanssi2019\demo.cpp(974): warning C4244: '=': conversion from 'double' to 'Uint32', possible loss of data
-c:\dev\instanssi2019\instanssi2019\demo.cpp(1018): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
-c:\dev\instanssi2019\instanssi2019\demo.cpp(1019): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
-c:\dev\instanssi2019\instanssi2019\demo.cpp(1020): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
-c:\dev\instanssi2019\instanssi2019\demo.cpp(1029): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
-c:\dev\instanssi2019\instanssi2019\demo.cpp(1030): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
-c:\dev\instanssi2019\instanssi2019\demo.cpp(1052): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
-c:\dev\instanssi2019\instanssi2019\demo.cpp(1053): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
-c:\dev\instanssi2019\instanssi2019\demo.cpp(1054): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
-c:\dev\instanssi2019\instanssi2019\demo.cpp(1063): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(1021): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(1022): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(1023): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(1032): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(1033): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(1055): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(1056): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(1057): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(1066): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(1077): warning C4244: '=': conversion from 'double' to 'char', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(1078): warning C4309: '=': truncation of constant value
+c:\dev\instanssi2019\instanssi2019\demo.cpp(1079): warning C4309: '=': truncation of constant value
 c:\dev\instanssi2019\instanssi2019\demo.cpp(890): warning C4101: 'server': unreferenced local variable
 c:\dev\instanssi2019\instanssi2019\demo.cpp(891): warning C4101: 'hp': unreferenced local variable
 c:\dev\instanssi2019\instanssi2019\demo.cpp(888): warning C4101: 'sock': unreferenced local variable
