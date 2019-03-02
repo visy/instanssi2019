@@ -13,6 +13,7 @@
 #include "sync.h"
 
 
+
 //#define VALOT
 
 struct Vector4 {
@@ -428,6 +429,12 @@ void DoFont() {
 	if (ti == 33)DoText("______This_mortal_realm_of_man._____", 100, 1080 - 100);
 	if (ti == 34)DoText("______It_is_time_for_judgement._____", 100, 1080 - 100);
 
+	if (ti == 50)DoText("_______visy_and_branch_coded", 100, 1080 - 100);
+	if (ti == 51)DoText("_paasikivi_kekkosen_linja_composed", 100, 1080 - 100);
+	if (ti == 52)DoText("dysposin_spiikki_and_branch_made_gfx", 100, 1080 - 100);
+	if (ti == 53)DoText("__greetings_to__mehu__paraguay__dkd", 100, 1080 - 100);
+	if (ti == 54)DoText("_may_your_souls_burn_forever_bright", 100, 1080 - 100);
+
 	//	if (ti == 1) DoText("performing_forbidden_rituals_outside", 100, 100);
 }
 
@@ -698,6 +705,7 @@ void FireEffect() {
 
 					float r = min(max(sync_hori + (rand() % 10) / 100.0f,0.0f),1.0f);
 					// outoa
+
 					r0 *= (1.0f - r);
 					g0 *= (1.0f - r);
 					b0 *= (1.0f - r);
@@ -705,9 +713,9 @@ void FireEffect() {
 					g1 *= r;
 					b1 *= r;
 
-					r0 = r0 + r1;
-					g0 = g0 + g1;
-					b0 = b0 + b1;
+					r0 = (int)(r0 + r1) & 255;
+					g0 = (int)(g0 + g1) & 255;
+					b0 = (int)(b0 + b1) & 255;
 					a0 = 255;
 					if (r0 + g0 + b0 > 3) {
 						set_pixel(ren, x, y, r0, g0, b0, 255);
@@ -956,7 +964,7 @@ int main(int argc, char * argv[]) {
 	struct sockaddr_in server;
 	struct hostent *hp;
 	//lightnum  //color
-	char buffer[151] = { 0x1, 0x1,0x00,0x00,  0xff,0x00,0x00,
+	char buffer[159] = { 0x1, 0x1,0x00,0x00,  0xff,0x00,0x00,
 							0x1,1, 0, 0,0,0,
 							0x1,2, 0, 0,0,0,
 							0x1,3, 0, 0,0,0,
@@ -1088,9 +1096,9 @@ int main(int argc, char * argv[]) {
 				buffer[6 + i] = 128 + sin(time*0.005 + i * 0.1) * 128;
 			}
 #ifdef VALOT
-			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
+			n = sendto(sock, buffer, sizeof(buffer) - 8, 0, (const struct sockaddr *)&server, length);
 #endif
-			}
+		}
 
 		if (sync_scene == 1) {
 			for (int i = 0; i < 151 - 6; i += 6) {
@@ -1099,7 +1107,7 @@ int main(int argc, char * argv[]) {
 				buffer[6 + i] = 0;
 			}
 #ifdef VALOT
-			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
+			n = sendto(sock, buffer, sizeof(buffer)-8, 0, (const struct sockaddr *)&server, length);
 #endif
 			}
 
@@ -1111,7 +1119,7 @@ int main(int argc, char * argv[]) {
 				buffer[6 + i] = 16;
 			}
 #ifdef VALOT
-			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
+			n = sendto(sock, buffer, sizeof(buffer) - 8, 0, (const struct sockaddr *)&server, length);
 #endif
 			}
 
@@ -1122,7 +1130,7 @@ int main(int argc, char * argv[]) {
 				buffer[6 + i] = 128 + sin(time*0.01 + i * 0.3) * 128;
 			}
 #ifdef VALOT
-			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
+			n = sendto(sock, buffer, sizeof(buffer) - 8, 0, (const struct sockaddr *)&server, length);
 #endif
 			}
 
@@ -1133,7 +1141,7 @@ int main(int argc, char * argv[]) {
 				buffer[6 + i] = 0;
 			}
 #ifdef VALOT
-			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
+			n = sendto(sock, buffer, sizeof(buffer) - 8, 0, (const struct sockaddr *)&server, length);
 #endif
 			}
 
@@ -1144,7 +1152,7 @@ int main(int argc, char * argv[]) {
 				buffer[6 + i] = 255;
 			}
 #ifdef VALOT
-			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
+			n = sendto(sock, buffer, sizeof(buffer) - 8, 0, (const struct sockaddr *)&server, length);
 #endif
 			}
 
