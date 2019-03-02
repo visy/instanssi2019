@@ -11,8 +11,8 @@ c:\dev\instanssi2019\instanssi2019\demo.cpp(458): warning C4244: 'argument': con
 c:\dev\instanssi2019\instanssi2019\demo.cpp(470): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
 c:\dev\instanssi2019\instanssi2019\demo.cpp(478): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 c:\dev\instanssi2019\instanssi2019\demo.cpp(479): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\dev\instanssi2019\instanssi2019\demo.cpp(496): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
-c:\dev\instanssi2019\instanssi2019\demo.cpp(504): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
+c:\dev\instanssi2019\instanssi2019\demo.cpp(497): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
+c:\dev\instanssi2019\instanssi2019\demo.cpp(505): warning C4554: '&': check operator precedence for possible error; use parentheses to clarify precedence
 c:\dev\instanssi2019\instanssi2019\demo.cpp(566): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 c:\dev\instanssi2019\instanssi2019\demo.cpp(567): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 c:\dev\instanssi2019\instanssi2019\demo.cpp(568): warning C4305: '=': truncation from 'double' to 'float'
