@@ -13,8 +13,8 @@
 #include "sync.h"
 
 
-
-//#define VALOT
+//#define SYNC_PLAYER
+#define VALOT
 
 struct Vector4 {
 	float x, y, z, w;
@@ -47,6 +47,68 @@ SDL_Texture *paita_texture;
 SDL_Texture *texturerepeat_texture;
 SDL_Texture *devil1_texture;
 SDL_Texture *devil2_texture;
+
+SDL_Texture* anim01;
+SDL_Texture* anim02;
+SDL_Texture* anim03;
+SDL_Texture* anim04;
+SDL_Texture* anim05;
+SDL_Texture* anim06;
+SDL_Texture* anim07;
+SDL_Texture* anim08;
+SDL_Texture* anim09;
+SDL_Texture* anim10;
+SDL_Texture* anim11;
+SDL_Texture* anim12;
+SDL_Texture* anim13;
+SDL_Texture* anim14;
+SDL_Texture* anim15;
+SDL_Texture* anim16;
+SDL_Texture* anim17;
+SDL_Texture* anim18;
+SDL_Texture* anim19;
+SDL_Texture* anim20;
+SDL_Texture* anim21;
+SDL_Texture* anim22;
+SDL_Texture* anim23;
+SDL_Texture* anim24;
+SDL_Texture* anim25;
+SDL_Texture* anim26;
+SDL_Texture* anim27;
+SDL_Texture* anim28;
+SDL_Texture* anim29;
+SDL_Texture* anim30;
+SDL_Texture* anim31;
+SDL_Texture* anim32;
+SDL_Texture* anim33;
+SDL_Texture* anim34;
+SDL_Texture* anim35;
+SDL_Texture* anim36;
+SDL_Texture* anim37;
+SDL_Texture* anim38;
+SDL_Texture* anim39;
+SDL_Texture* anim40;
+SDL_Texture* anim41;
+SDL_Texture* anim42;
+SDL_Texture* anim43;
+SDL_Texture* anim44;
+SDL_Texture* anim45;
+SDL_Texture* anim46;
+SDL_Texture* anim47;
+SDL_Texture* anim48;
+SDL_Texture* anim49;
+SDL_Texture* anim50;
+SDL_Texture* anim51;
+SDL_Texture* anim52;
+SDL_Texture* anim53;
+SDL_Texture* anim54;
+SDL_Texture* anim55;
+SDL_Texture* anim56;
+SDL_Texture* anim57;
+SDL_Texture* anim58;
+SDL_Texture* anim60;
+SDL_Texture* anim59;
+
 
 int effu_w = 320;
 int effu_h = 200;
@@ -781,6 +843,83 @@ void RenderHouse() {
 	SDL_RenderCopy(ren, house_texture, NULL, &dstrect);
 }
 
+int startrow = -1;
+int currentrow = 0;
+void DoAnimPlay() {
+
+	if (startrow == -1) startrow = row;
+
+	SDL_SetRenderTarget(ren, rtttexture);
+	SDL_SetTextureBlendMode(rtttexture, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(ren, sync_c_r, sync_c_g, sync_c_b, SDL_ALPHA_OPAQUE);
+
+	currentrow = row - startrow;
+	if (currentrow == 60) { startrow = row; currentrow = 0; }
+
+	if (currentrow == 0) SDL_RenderCopy(ren, anim01, NULL, NULL);
+	if (currentrow == 1) SDL_RenderCopy(ren, anim02, NULL, NULL);
+	if (currentrow == 2) SDL_RenderCopy(ren, anim03, NULL, NULL);
+	if (currentrow == 3) SDL_RenderCopy(ren, anim04, NULL, NULL);
+	if (currentrow == 4) SDL_RenderCopy(ren, anim05, NULL, NULL);
+	if (currentrow == 5) SDL_RenderCopy(ren, anim06, NULL, NULL);
+	if (currentrow == 6) SDL_RenderCopy(ren, anim07, NULL, NULL);
+	if (currentrow == 7) SDL_RenderCopy(ren, anim08, NULL, NULL);
+	if (currentrow == 8) SDL_RenderCopy(ren, anim09, NULL, NULL);
+	if (currentrow == 9) SDL_RenderCopy(ren, anim10, NULL, NULL);
+	if (currentrow == 10) SDL_RenderCopy(ren, anim11, NULL, NULL);
+	if (currentrow == 11) SDL_RenderCopy(ren, anim12, NULL, NULL);
+	if (currentrow == 12) SDL_RenderCopy(ren, anim13, NULL, NULL);
+	if (currentrow == 13) SDL_RenderCopy(ren, anim14, NULL, NULL);
+	if (currentrow == 14) SDL_RenderCopy(ren, anim15, NULL, NULL);
+	if (currentrow == 15) SDL_RenderCopy(ren, anim16, NULL, NULL);
+	if (currentrow == 16) SDL_RenderCopy(ren, anim17, NULL, NULL);
+	if (currentrow == 17) SDL_RenderCopy(ren, anim18, NULL, NULL);
+	if (currentrow == 18) SDL_RenderCopy(ren, anim19, NULL, NULL);
+	if (currentrow == 19) SDL_RenderCopy(ren, anim20, NULL, NULL);
+	if (currentrow == 20) SDL_RenderCopy(ren, anim21, NULL, NULL);
+	if (currentrow == 21) SDL_RenderCopy(ren, anim22, NULL, NULL);
+	if (currentrow == 22) SDL_RenderCopy(ren, anim23, NULL, NULL);
+	if (currentrow == 23) SDL_RenderCopy(ren, anim24, NULL, NULL);
+	if (currentrow == 24) SDL_RenderCopy(ren, anim25, NULL, NULL);
+	if (currentrow == 25) SDL_RenderCopy(ren, anim26, NULL, NULL);
+	if (currentrow == 26) SDL_RenderCopy(ren, anim27, NULL, NULL);
+	if (currentrow == 27) SDL_RenderCopy(ren, anim28, NULL, NULL);
+	if (currentrow == 28) SDL_RenderCopy(ren, anim29, NULL, NULL);
+	if (currentrow == 29) SDL_RenderCopy(ren, anim30, NULL, NULL);
+	if (currentrow == 30) SDL_RenderCopy(ren, anim31, NULL, NULL);
+	if (currentrow == 31) SDL_RenderCopy(ren, anim32, NULL, NULL);
+	if (currentrow == 32) SDL_RenderCopy(ren, anim33, NULL, NULL);
+	if (currentrow == 33) SDL_RenderCopy(ren, anim34, NULL, NULL);
+	if (currentrow == 34) SDL_RenderCopy(ren, anim35, NULL, NULL);
+	if (currentrow == 35) SDL_RenderCopy(ren, anim36, NULL, NULL);
+	if (currentrow == 36) SDL_RenderCopy(ren, anim37, NULL, NULL);
+	if (currentrow == 37) SDL_RenderCopy(ren, anim38, NULL, NULL);
+	if (currentrow == 38) SDL_RenderCopy(ren, anim39, NULL, NULL);
+	if (currentrow == 39) SDL_RenderCopy(ren, anim40, NULL, NULL);
+	if (currentrow == 40) SDL_RenderCopy(ren, anim41, NULL, NULL);
+	if (currentrow == 41) SDL_RenderCopy(ren, anim42, NULL, NULL);
+	if (currentrow == 42) SDL_RenderCopy(ren, anim43, NULL, NULL);
+	if (currentrow == 43) SDL_RenderCopy(ren, anim44, NULL, NULL);
+	if (currentrow == 44) SDL_RenderCopy(ren, anim45, NULL, NULL);
+	if (currentrow == 45) SDL_RenderCopy(ren, anim46, NULL, NULL);
+	if (currentrow == 46) SDL_RenderCopy(ren, anim47, NULL, NULL);
+	if (currentrow == 47) SDL_RenderCopy(ren, anim48, NULL, NULL);
+	if (currentrow == 48) SDL_RenderCopy(ren, anim49, NULL, NULL);
+	if (currentrow == 49) SDL_RenderCopy(ren, anim50, NULL, NULL);
+	if (currentrow == 50) SDL_RenderCopy(ren, anim51, NULL, NULL);
+	if (currentrow == 51) SDL_RenderCopy(ren, anim52, NULL, NULL);
+	if (currentrow == 52) SDL_RenderCopy(ren, anim53, NULL, NULL);
+	if (currentrow == 53) SDL_RenderCopy(ren, anim54, NULL, NULL);
+	if (currentrow == 54) SDL_RenderCopy(ren, anim55, NULL, NULL);
+	if (currentrow == 55) SDL_RenderCopy(ren, anim56, NULL, NULL);
+	if (currentrow == 56) SDL_RenderCopy(ren, anim57, NULL, NULL);
+	if (currentrow == 57) SDL_RenderCopy(ren, anim58, NULL, NULL);
+	if (currentrow == 58) SDL_RenderCopy(ren, anim59, NULL, NULL);
+	if (currentrow == 59) SDL_RenderCopy(ren, anim60, NULL, NULL);
+	SDL_SetRenderTarget(ren, NULL);
+
+}
+
 int gw = 160;
 int gh = 100;
 
@@ -854,7 +993,7 @@ int main(int argc, char * argv[]) {
 	}
 
 	win = SDL_CreateWindow("instanssi 2019 demo", 8, 8, 1920, 1080, SDL_WINDOW_SHOWN);
-	//	SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
 	if (win == nullptr) {
 		std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
@@ -882,6 +1021,68 @@ int main(int argc, char * argv[]) {
 	texturerepeat_image = LoadSurface("textureloop.bmp");
 	devil1_image = LoadSurface("smear1.bmp");
 	devil2_image = LoadSurface("smear2.bmp");
+
+	anim01 = LoadTexture("0001.bmp");
+	anim02 = LoadTexture("0002.bmp");
+	anim03 = LoadTexture("0003.bmp");
+	anim04 = LoadTexture("0004.bmp");
+	anim05 = LoadTexture("0005.bmp");
+	anim06 = LoadTexture("0006.bmp");
+	anim07 = LoadTexture("0007.bmp");
+	anim08 = LoadTexture("0008.bmp");
+	anim09 = LoadTexture("0009.bmp");
+	anim10 = LoadTexture("0010.bmp");
+	anim11 = LoadTexture("0011.bmp");
+	anim12 = LoadTexture("0012.bmp");
+	anim13 = LoadTexture("0013.bmp");
+	anim14 = LoadTexture("0014.bmp");
+	anim15 = LoadTexture("0015.bmp");
+	anim16 = LoadTexture("0016.bmp");
+	anim17 = LoadTexture("0017.bmp");
+	anim18 = LoadTexture("0018.bmp");
+	anim19 = LoadTexture("0019.bmp");
+	anim20 = LoadTexture("0020.bmp");
+	anim21 = LoadTexture("0021.bmp");
+	anim22 = LoadTexture("0022.bmp");
+	anim23 = LoadTexture("0023.bmp");
+	anim24 = LoadTexture("0024.bmp");
+	anim25 = LoadTexture("0025.bmp");
+	anim26 = LoadTexture("0026.bmp");
+	anim27 = LoadTexture("0027.bmp");
+	anim28 = LoadTexture("0028.bmp");
+	anim29 = LoadTexture("0029.bmp");
+	anim30 = LoadTexture("0030.bmp");
+	anim31 = LoadTexture("0031.bmp");
+	anim32 = LoadTexture("0032.bmp");
+	anim33 = LoadTexture("0033.bmp");
+	anim34 = LoadTexture("0034.bmp");
+	anim35 = LoadTexture("0035.bmp");
+	anim36 = LoadTexture("0036.bmp");
+	anim37 = LoadTexture("0037.bmp");
+	anim38 = LoadTexture("0038.bmp");
+	anim39 = LoadTexture("0039.bmp");
+	anim40 = LoadTexture("0040.bmp");
+	anim41 = LoadTexture("0041.bmp");
+	anim42 = LoadTexture("0042.bmp");
+	anim43 = LoadTexture("0043.bmp");
+	anim44 = LoadTexture("0044.bmp");
+	anim45 = LoadTexture("0045.bmp");
+	anim46 = LoadTexture("0046.bmp");
+	anim47 = LoadTexture("0047.bmp");
+	anim48 = LoadTexture("0048.bmp");
+	anim49 = LoadTexture("0049.bmp");
+	anim50 = LoadTexture("0050.bmp");
+	anim51 = LoadTexture("0051.bmp");
+	anim52 = LoadTexture("0052.bmp");
+	anim53 = LoadTexture("0053.bmp");
+	anim54 = LoadTexture("0054.bmp");
+	anim55 = LoadTexture("0055.bmp");
+	anim56 = LoadTexture("0056.bmp");
+	anim57 = LoadTexture("0057.bmp");
+	anim58 = LoadTexture("0058.bmp");
+	anim59 = LoadTexture("0059.bmp");
+	anim60 = LoadTexture("0060.bmp");
+
 
 	SDL_SetColorKey(font_image, SDL_TRUE, SDL_MapRGB(font_image->format, 0x0, 0x0, 0x0));
 	SDL_SetColorKey(paita_image, SDL_TRUE, SDL_MapRGB(font_image->format, 0xff, 0xff, 0x0));
@@ -1004,7 +1205,6 @@ int main(int argc, char * argv[]) {
 							0x1,23, 0, 0,0,0,
 							0x1,24, 0, 0,0,0
 	};
-#ifdef VALOT
 	hp = gethostbyname("valot.party");
 	sock = socket(AF_INET, SOCK_DGRAM, 0);
 	int removeme;
@@ -1015,7 +1215,6 @@ int main(int argc, char * argv[]) {
 	server.sin_port = htons(atoi("9909"));
 
 	length = sizeof(struct sockaddr_in);
-#endif
 	/* let's roll! */
 	BASS_Start();
 	BASS_ChannelPlay(stream, false);
@@ -1094,8 +1293,10 @@ int main(int argc, char * argv[]) {
 		case 6:
 			DoFontOverlay();
 			break;
-
-
+		case 7:
+			DoAnimPlay();
+			SDL_RenderCopy(ren, rtttexture, NULL, NULL);
+			break;
 		}
 		DoFont();
 
