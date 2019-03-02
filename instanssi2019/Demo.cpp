@@ -391,7 +391,7 @@ void DoTextG(const char* text, int x, int y) {
 		int wg = prng() % 16;
 		int hg = prng() % 16;
 		int ef = abs(255*cos((i*0.01+1)*0.1+time*0.0001+cos(i*0.01+y*0.01+time*0.0001)*20));
-		SDL_SetTextureColorMod(font_texture, (abs(64-ef)+1), (abs(256-ef)+1), (abs(64-ef)+1));
+		SDL_SetTextureColorMod(font_texture, (abs(64-ef)+1), (abs(92-ef)+1), (abs(64-ef)+1));
 
 		SDL_Rect dstrect;
 		dstrect.x = cursor_x;
@@ -775,7 +775,7 @@ int main(int argc, char * argv[]) {
 	}
 
 	win = SDL_CreateWindow("instanssi 2019 demo", 100, 100, 1920, 1080, SDL_WINDOW_SHOWN);
-	//SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN_DESKTOP);
+//	SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
 	if (win == nullptr) {
 		std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
@@ -1003,11 +1003,14 @@ int main(int argc, char * argv[]) {
 			FireEffect();
 			SDL_RenderCopy(ren, rtttexture, NULL, NULL);
 			break;
+		case 6:
+			DoFontOverlay();
+			break;
+
+
 		}
 
 		DoFont();
-
-//		DoFontOverlay();
 
 		SDL_RenderPresent(ren);
 
@@ -1063,6 +1066,17 @@ int main(int argc, char * argv[]) {
 				buffer[4 + i] = 128 + sin(time*0.1 + i * 0.3) * 128;
 				buffer[5 + i] = 0;
 				buffer[6 + i] = 0;
+			}
+#ifdef VALOT
+			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
+#endif
+		}
+
+		if (sync_scene == 6) {
+			for (int i = 0; i < 151 - 6; i += 6) {
+				buffer[4 + i] = 128+sin(i*100.+time*0.1)*127;
+				buffer[5 + i] = 255;
+				buffer[6 + i] = 255;
 			}
 #ifdef VALOT
 			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
