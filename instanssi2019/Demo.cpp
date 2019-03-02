@@ -413,6 +413,11 @@ void DoFont() {
 	if (ti == 1) DoText("______Quadtrip+Ivory+Jumalauta______", 100, 1080 / 2 - 32);
 	if (ti == 2) DoText("PURGATORIUm____________", 100, 1080 / 2 - 32);
 
+	if (ti == 16) DoText("____Not_living_and_not_yet_dead____", 100, 1080 / 2 - 32);
+	if (ti == 17) DoText("______Welcome_to_hell_on_Earth_____", 100, 1080 / 2 - 32);
+	if (ti == 18) DoText("_____We_are_stuck_here_together____", 100, 1080 / 2 - 32);
+
+
 	if (ti == 32)DoText("______Leave_your_life_behind..._____", 100, 1080-100);
 	if (ti == 33)DoText("______This_mortal_realm_of_man._____", 100, 1080 - 100);
 	if (ti == 34)DoText("______It_is_time_for_judgement._____", 100, 1080 - 100);
@@ -1007,14 +1012,64 @@ int main(int argc, char * argv[]) {
 		SDL_RenderPresent(ren);
 
 		BASS_Update(0); /* decrease the chance of missing vsync */
-		for (int i = 0; i < 151; i += 6) {
-			buffer[4 + i] = 128 + sin(time*0.005 + i * 0.1) * 128;
-			buffer[5 + i] = 128 + sin(time*0.005 + i * 0.1) * 128;
-			buffer[6 + i] = 128 + sin(time*0.005 + i * 0.1) * 128;
-		}
+
+		if (sync_scene == 0) {
+			for (int i = 0; i < 151; i += 6) {
+				buffer[4 + i] = 200 + sin(time*0.005 + i * 0.1) * 50;
+				buffer[5 + i] = 128 + sin(time*0.005 + i * 0.1) * 64;
+				buffer[6 + i] = 128 + sin(time*0.005 + i * 0.1) * 128;
+			}
 #ifdef VALOT
-		n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
+			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
 #endif
+		}
+
+		if (sync_scene == 1) {
+			for (int i = 0; i < 151-6; i += 6) {
+				buffer[4 + i] = 128 + sin(time*0.005 + i * 1.1) * 127;
+				buffer[5 + i] = 128 + sin(time*0.005 + i * 1.1) * 127;
+				buffer[6 + i] = 0;
+			}
+#ifdef VALOT
+			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
+#endif
+		}
+
+
+		if (sync_scene == 3) {
+			for (int i = 0; i < 151; i += 6) {
+				buffer[4 + i] = 64;
+				buffer[5 + i] = 16;
+				buffer[6 + i] = 16;
+			}
+#ifdef VALOT
+			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
+#endif
+		}
+
+		if (sync_scene == 4) {
+			for (int i = 0; i < 151; i += 6) {
+				buffer[4 + i] = 128 + sin(time*0.01 + i * 0.3) * 128;
+				buffer[5 + i] = 128 + sin(time*0.01 + i * 0.3) * 128;
+				buffer[6 + i] = 128 + sin(time*0.01 + i * 0.3) * 128;
+			}
+#ifdef VALOT
+			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
+#endif
+		}
+
+		if (sync_scene == 5) {
+			for (int i = 0; i < 151-6; i += 6) {
+				buffer[4 + i] = 128 + sin(time*0.1 + i * 0.3) * 128;
+				buffer[5 + i] = 0;
+				buffer[6 + i] = 0;
+			}
+#ifdef VALOT
+			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
+#endif
+		}
+
+
 	}
 
 #ifndef SYNC_PLAYER
