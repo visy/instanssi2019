@@ -13,6 +13,8 @@
 #include "sync.h"
 
 
+//#define VALOT
+
 struct Vector4 {
 	float x, y, z, w;
 };
@@ -34,6 +36,7 @@ SDL_Window *win;
 SDL_Renderer *ren;
 
 SDL_Texture *scrtexture;
+SDL_Texture *rtttexture;
 SDL_Texture *kuviotexture;
 
 SDL_Texture *reversecross_texture;
@@ -45,9 +48,9 @@ SDL_Texture *devil1_texture;
 SDL_Texture *devil2_texture;
 
 int effu_w = 320;
-int effu_h = 400;
+int effu_h = 200;
 
-Uint32 *pixels = new Uint32[effu_w * effu_h];
+Uint32 *pixels = new Uint32[effu_w * (effu_h+50)];
 Uint32 *pixelskuvio = new Uint32[160 * 100];
 
 SDL_Surface *colormap_image;
@@ -144,6 +147,7 @@ void DoQuit() {
 	delete[] pixels;
 	delete[] pixelskuvio;
 	SDL_DestroyTexture(scrtexture);
+	SDL_DestroyTexture(rtttexture);
 	SDL_DestroyRenderer(ren);
 	SDL_DestroyWindow(win);
 }
@@ -415,6 +419,11 @@ void DoFont() {
 	if (ti == 1) DoText("______Quadtrip+Ivory+Jumalauta______", 100, 1080 / 2 - 32);
 	if (ti == 2) DoText("PURGATORIUm____________", 100, 1080 / 2 - 32);
 
+	if (ti == 16) DoText("____Not_living_and_not_yet_dead____", 100, 1080 / 2 - 32);
+	if (ti == 17) DoText("______Welcome_to_hell_on_Earth_____", 100, 1080 / 2 - 32);
+	if (ti == 18) DoText("_____We_are_stuck_here_together____", 100, 1080 / 2 - 32);
+
+
 	if (ti == 32)DoText("______Leave_your_life_behind..._____", 100, 1080-100);
 	if (ti == 33)DoText("______This_mortal_realm_of_man._____", 100, 1080 - 100);
 	if (ti == 34)DoText("______It_is_time_for_judgement._____", 100, 1080 - 100);
@@ -449,11 +458,13 @@ SDL_Surface *sshot;
 void RenderKefrensCross() {
 
 
-	SDL_SetRenderTarget(ren, scrtexture);
-	SDL_SetTextureBlendMode(scrtexture, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderTarget(ren, NULL);
+//	SDL_SetTextureBlendMode(rtttexture, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(ren, sync_c_r, sync_c_g, sync_c_b, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(ren);
 	SDL_Rect dstrect;
+	SDL_SetRenderTarget(ren, rtttexture);
+	SDL_RenderClear(ren);
 	dstrect.w = 128;
 	dstrect.h = 128;
 	for (int i = 0; i < 100; i += 2) {
@@ -461,6 +472,7 @@ void RenderKefrensCross() {
 		dstrect.y = 200 / 2 - 64 + i - 80 + sin(sync_dist*0.321f + i * 0.05f) * 30;
 		SDL_RenderCopy(ren, reversecross_texture, NULL, &dstrect);
 	}
+
 	int w = 1920;
 	int h = 1080;
 	if (sshot == NULL)
@@ -499,8 +511,6 @@ void RenderKefrensCross() {
 	}
 	set_pixel(ren, 100, 100, 32, 123, 200, 32);
 	SDL_SetRenderTarget(ren, NULL);
-	SDL_RenderPresent(ren);
-	//SDL_FreeSurface(sshot);
 }
 
 float dot(Vector3 A, Vector3 B)
@@ -542,6 +552,8 @@ Vector4 mainImage(Vector2 fragCoord, Vector2 iResolution)
 	Vector2 uv; // = fragCoord.xy / iResolution.xy - vec2(0.5);
 	uv.x = fragCoord.x / iResolution.x - 0.5f;
 	uv.y = fragCoord.y / iResolution.y - 0.5f;
+	uv.x *= 2.0;
+	uv.y *= 2.0;
 	float aspect = iResolution.x / iResolution.y;
 	Vector3 direction; // = normalize(vec3(.5 * uv * vec2(aspect, 1.0), 0.7));
 	direction.x = 0.5 * uv.x * aspect;
@@ -562,14 +574,14 @@ void SphereEffect() {
 
 	SDL_Rect dstrect;
 
-	SDL_SetRenderTarget(ren, scrtexture);
-	SDL_SetTextureBlendMode(scrtexture, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderTarget(ren, rtttexture);
+	SDL_SetTextureBlendMode(rtttexture, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(ren, sync_c_r, sync_c_g, sync_c_b, SDL_ALPHA_OPAQUE);
 	float ax = sin(sync_x) * 256.0f;
 	float ay = cos(sync_y) * 256.0f;
 	flick++;
-	for (int y = 0; y < 200; y++) {
-		for (int x = 0; x < 320; x ++) {
+	for (int y = 0; y < 200; y+=1) {
+		for (int x = 0; x < 320; x++) {
 			Vector4 uv = mainImage(Vector2{ (float)x + sin(sync_rot)*100.0f,(float)y + cos(sync_rot*0.8f)*100.0f }, Vector2{ 320.0f,200.0f });
 			/*
 			auto pixel = GetPixel(sshot, x, y);
@@ -598,7 +610,6 @@ void SphereEffect() {
 		}
 	}
 	SDL_SetRenderTarget(ren, NULL);
-	SDL_RenderPresent(ren);
 	//SDL_FreeSurface(sshot);
 }
 
@@ -606,8 +617,8 @@ void SphereEffect() {
 void FireEffect() {
 
 
-	SDL_SetRenderTarget(ren, scrtexture);
-	SDL_SetTextureBlendMode(scrtexture, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderTarget(ren, rtttexture);
+	SDL_SetTextureBlendMode(rtttexture, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(ren, sync_c_r, sync_c_g, sync_c_b, SDL_ALPHA_OPAQUE);
 	int w = 1920;
 	int h = 1080;
@@ -661,7 +672,6 @@ void FireEffect() {
 	dstrect.y = 0;
 	SDL_RenderCopy(ren, devil1_texture, NULL, &dstrect);
 	SDL_SetRenderTarget(ren, NULL);
-	SDL_RenderPresent(ren);
 	//SDL_FreeSurface(sshot);
 }
 
@@ -674,7 +684,7 @@ void RenderHouse() {
 	for (int y = 0; y < 100; y++) {
 		for (int x = 1; x < 320; x++) {
 			int xs = x+((effu_w-2)/32)-10;
-			int ys = y * 3;
+			int ys = y * 1.3;
 			pixels[(ys * effu_w) + xs] = house_mask[(y * 320) + x-10]*0x00111111;
 			pixels[((ys+1) * effu_w) + xs] = house_mask[(y * 320) + x-10] * 0x00111111;
 		}
@@ -683,7 +693,7 @@ void RenderHouse() {
 	for (int y = 100; y < 130; y++) {
 		for (int x = 1; x < 320; x++) {
 			int xs = x + ((effu_w - 2) / 32)-10;
-			int ys = y * 3;
+			int ys = y * 1.3;
 			xs += cos(time*0.001+y*0.5)*(6-abs(cos(y*0.1)*3));
 			pixels[ys * effu_w + xs] = house_mask[(((230-y)-30) * 320) + x - 10] * 0x00040033;
 		}
@@ -697,10 +707,10 @@ void RenderHouse() {
 	SDL_SetTextureAlphaMod(house_texture, 180);
 	SDL_Rect dstrect;
 
-	dstrect.x = effu_w / 8;
+	dstrect.x = effu_w / 7;
 	dstrect.y = 1;
 	dstrect.w = effu_w*6;
-	dstrect.h = effu_h*2;
+	dstrect.h = effu_h*3.5;
 	SDL_RenderCopy(ren, house_texture, NULL, &dstrect);
 }
 
@@ -708,7 +718,7 @@ int gw = 160;
 int gh = 100;
 
 int g2w = 320;
-int g2h = 400;
+int g2h = 200;
 
 int paitacount = 0;
 int r_paita = 1337;
@@ -744,7 +754,7 @@ void RenderShirt() {
 	SDL_Rect dstrect;
 
 	dstrect.x = effu_w * 1.62;
-	dstrect.y = effu_h * 0.9;
+	dstrect.y = effu_h * 1.8;
 	dstrect.w = 160 * 4;
 	dstrect.h = 100 * 2.7;
 	SDL_RenderCopy(ren, kuviotexture, NULL, &dstrect);
@@ -794,6 +804,7 @@ int main(int argc, char * argv[]) {
 
 	scrtexture = SDL_CreateTexture(ren, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, effu_w, effu_h);
 	kuviotexture = SDL_CreateTexture(ren, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, 160, 100);
+	rtttexture = SDL_CreateTexture(ren, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, effu_w, effu_h);
 
 	colormap_image = LoadSurface("d1.bmp");
 	heightmap_image = LoadSurface("c1.bmp");
@@ -894,7 +905,6 @@ int main(int argc, char * argv[]) {
 	BASS_Init(-1, 44100, 0, 0, 0);
 	stream = BASS_StreamCreateFile(false, "music.ogg", 0, 0, BASS_STREAM_PRESCAN);
 
-#ifdef VALOT
 	int sock, n;
 	unsigned int length;
 	struct sockaddr_in server;
@@ -926,6 +936,7 @@ int main(int argc, char * argv[]) {
 							0x1,23, 0, 0,0,0,
 							0x1,24, 0, 0,0,0
 	};
+#ifdef VALOT
 	hp = gethostbyname("valot.party");
 	sock = socket(AF_INET, SOCK_DGRAM, 0);
 	int removeme;
@@ -995,7 +1006,7 @@ int main(int argc, char * argv[]) {
 			break;
 		case 1:
 			RenderKefrensCross();
-			SDL_RenderCopy(ren, scrtexture, NULL, NULL);
+			SDL_RenderCopy(ren, rtttexture, NULL, NULL);
 			break;
 		case 2:
 			RenderHouse();
@@ -1006,29 +1017,78 @@ int main(int argc, char * argv[]) {
 			break;
 		case 4:
 			SphereEffect();
-			SDL_RenderCopy(ren, scrtexture, NULL, NULL);
+			SDL_RenderCopy(ren, rtttexture, NULL, NULL);
 			break;
 		case 5:
 			FireEffect();
-			SDL_RenderCopy(ren, scrtexture, NULL, NULL);
+			SDL_RenderCopy(ren, rtttexture, NULL, NULL);
 			break;
 		}
-
 		DoFont();
 
-//		DoFontOverlay();
+		//		DoFontOverlay();
 
 		SDL_RenderPresent(ren);
 
 		BASS_Update(0); /* decrease the chance of missing vsync */
+
+		if (sync_scene == 0) {
+			for (int i = 0; i < 151; i += 6) {
+				buffer[4 + i] = 200 + sin(time*0.005 + i * 0.1) * 50;
+				buffer[5 + i] = 128 + sin(time*0.005 + i * 0.1) * 64;
+				buffer[6 + i] = 128 + sin(time*0.005 + i * 0.1) * 128;
+			}
 #ifdef VALOT
-		for (int i = 0; i < 151; i += 6) {
-			buffer[4 + i] = 128 + sin(time*0.005 + i * 0.1) * 128;
-			buffer[5 + i] = 128 + sin(time*0.005 + i * 0.1) * 128;
-			buffer[6 + i] = 128 + sin(time*0.005 + i * 0.1) * 128;
-		}
-		n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
+			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
 #endif
+		}
+
+		if (sync_scene == 1) {
+			for (int i = 0; i < 151 - 6; i += 6) {
+				buffer[4 + i] = 128 + sin(time*0.005 + i * 1.1) * 127;
+				buffer[5 + i] = 128 + sin(time*0.005 + i * 1.1) * 127;
+				buffer[6 + i] = 0;
+			}
+#ifdef VALOT
+			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
+#endif
+		}
+
+
+		if (sync_scene == 3) {
+			for (int i = 0; i < 151; i += 6) {
+				buffer[4 + i] = 64;
+				buffer[5 + i] = 16;
+				buffer[6 + i] = 16;
+			}
+#ifdef VALOT
+			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
+#endif
+		}
+
+		if (sync_scene == 4) {
+			for (int i = 0; i < 151; i += 6) {
+				buffer[4 + i] = 128 + sin(time*0.01 + i * 0.3) * 128;
+				buffer[5 + i] = 128 + sin(time*0.01 + i * 0.3) * 128;
+				buffer[6 + i] = 128 + sin(time*0.01 + i * 0.3) * 128;
+			}
+#ifdef VALOT
+			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
+#endif
+		}
+
+		if (sync_scene == 5) {
+			for (int i = 0; i < 151 - 6; i += 6) {
+				buffer[4 + i] = 128 + sin(time*0.1 + i * 0.3) * 128;
+				buffer[5 + i] = 0;
+				buffer[6 + i] = 0;
+			}
+#ifdef VALOT
+			n = sendto(sock, buffer, sizeof(buffer), 0, (const struct sockaddr *)&server, length);
+#endif
+		}
+
+
 	}
 
 #ifndef SYNC_PLAYER
@@ -1045,4 +1105,3 @@ int main(int argc, char * argv[]) {
 
 	return 0;
 }
-
