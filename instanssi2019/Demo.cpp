@@ -804,7 +804,7 @@ void RenderShirt() {
 	dstrect.h = 100 * 2.7;
 	SDL_RenderCopy(ren, kuviotexture, NULL, &dstrect);
 	SDL_SetTextureBlendMode(paita_texture, SDL_BLENDMODE_BLEND);
-
+	  
 	SDL_SetTextureAlphaMod(paita_texture, 255);
 	SDL_RenderCopy(ren, paita_texture, NULL, NULL);
 
