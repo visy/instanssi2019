@@ -1,0 +1,20 @@
+﻿  Demo.cpp
+c:\dev\instanssi2019\instanssi2019\demo.cpp(171): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(233): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\dev\instanssi2019\instanssi2019\demo.cpp(237): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(264): warning C4305: '+=': truncation from 'double' to 'float'
+c:\dev\instanssi2019\instanssi2019\demo.cpp(331): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(343): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(346): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(358): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(410): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\dev\instanssi2019\instanssi2019\demo.cpp(431): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(432): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(434): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(448): warning C4244: 'argument': conversion from 'float' to 'Uint8', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(589): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\dev\instanssi2019\instanssi2019\demo.cpp(612): warning C4244: '=': conversion from 'double' to 'Uint32', possible loss of data
+  device.c
+  track.c
+  Generating Code...
+LINK : fatal error LNK1561: entry point must be defined
