@@ -7,6 +7,7 @@ beatsPerMin="125">
 		<key row="320" value="0.000000" interpolation="0" />
 		<key row="960" value="2.000000" interpolation="0" />
 		<key row="1280" value="1.000000" interpolation="0" />
+		<key row="1615" value="4.000000" interpolation="0" />
 	</track>
 	<track name="clear.r" folded="0" muteKeyCount="0"
 color="ffb28050">
@@ -67,6 +68,10 @@ color="ff4f71b2">
 		<key row="320" value="0.000000" interpolation="0" />
 		<key row="473" value="0.000000" interpolation="2" />
 		<key row="632" value="4.000000" interpolation="0" />
+		<key row="1280" value="0.000000" interpolation="1" />
+		<key row="1614" value="64.000000" interpolation="0" />
+		<key row="1615" value="122.000000" interpolation="1" />
+		<key row="1760" value="-12.000000" interpolation="0" />
 	</track>
 	<track name="cam.dist" folded="0" muteKeyCount="0"
 color="ff8850b2">
@@ -74,6 +79,8 @@ color="ff8850b2">
 		<key row="560" value="1000.000000" interpolation="0" />
 		<key row="593" value="1000.000000" interpolation="1" />
 		<key row="959" value="0.000000" interpolation="0" />
+		<key row="1280" value="0.000000" interpolation="1" />
+		<key row="1614" value="22.000000" interpolation="0" />
 	</track>
 	<track name="cam.x" folded="0" muteKeyCount="0" color="ffb25091">
 		<key row="320" value="900.000000" interpolation="2" />
@@ -82,11 +89,15 @@ color="ff8850b2">
 		<key row="756" value="828.000000" interpolation="0" />
 		<key row="812" value="828.000000" interpolation="3" />
 		<key row="959" value="600.000000" interpolation="0" />
+		<key row="1615" value="0.000000" interpolation="1" />
+		<key row="1760" value="7.000000" interpolation="0" />
 	</track>
 	<track name="cam.y" folded="0" muteKeyCount="0" color="ffb27474">
 		<key row="320" value="25.000000" interpolation="0" />
 		<key row="616" value="25.000000" interpolation="2" />
 		<key row="888" value="-568.590454" interpolation="0" />
+		<key row="1615" value="0.000000" interpolation="1" />
+		<key row="1760" value="9.000000" interpolation="0" />
 	</track>
 	<track name="cam.h" folded="0" muteKeyCount="0" color="ffb28050">
 		<key row="0" value="9743.000000" interpolation="0" />
@@ -102,6 +113,8 @@ color="ff8850b2">
 		<key row="240" value="10022.000000" interpolation="3" />
 		<key row="312" value="9986.000000" interpolation="0" />
 		<key row="320" value="30.000000" interpolation="0" />
+		<key row="1615" value="1.600000" interpolation="1" />
+		<key row="1760" value="0.700000" interpolation="0" />
 	</track>
 	<track name="cam.hori" folded="0" muteKeyCount="0"
 color="ffa9b250">
