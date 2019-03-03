@@ -345,7 +345,7 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 		ybuffer[i] = effu_h;
 	}
 
-	float dz = 0.5;
+	float dz = 0.05;
 	float z = 1;
 	plx = 0;
 	ply = 0;
@@ -369,7 +369,7 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 
 			int height_on_screen = (int)((zz - colormap_buffer[offset]) / z * scale_h + horizon);
 			height_on_screen << 1;
-			VertLine(i, (int)height_on_screen + effu_h, ybuffer[i], heightmap_buffer[offset], z);
+			VertLine(i, (int)height_on_screen + effu_h, effu_h, heightmap_buffer[offset], z);
 
 
 			plx += dx;
@@ -377,7 +377,7 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 		}
 
 		z += dz;
-		dz += 0.05;
+		dz += 0.01;
 	}
 }
 
