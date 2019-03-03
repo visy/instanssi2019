@@ -1,4 +1,5 @@
 ﻿  Demo.cpp
+d:\dev\instanssi2019\instanssi2019\demo.cpp(348): warning C4305: 'initializing': truncation from 'double' to 'float'
 d:\dev\instanssi2019\instanssi2019\demo.cpp(352): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 d:\dev\instanssi2019\instanssi2019\demo.cpp(363): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 d:\dev\instanssi2019\instanssi2019\demo.cpp(371): warning C4552: '<<': operator has no effect; expected operator with side-effect
