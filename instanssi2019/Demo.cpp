@@ -250,23 +250,16 @@ SDL_Texture* LoadTexture(std::string file) {
 }
 
 
-void VertLine(int x, int y1, int y2, Uint32 color, float z) {
+inline void VertLine(int x, int y1, int y2, Uint32 color, float z) {
 	if (x < 0 || x > effu_w) return;
 	if (y1 < 0) y1 = 0;
-	if (y1 > effu_h) y1 = effu_h;
-	if (y2 > effu_h) y2 = effu_h;
-	float zz = 1.0 - z * 0.001;
-	if (zz < 0) zz = 0;
-
-	Uint8 *c = (Uint8*)&color;
-
-	Uint32 *cc = (Uint32*)c;
+	if (y1 > effu_h) y1 = effu_h-1;
+	if (y2 > effu_h) y2 = effu_h-1;
 
 	int ys = y2;
 	while (ys > y1) {
-		ys -= 2;
-		pixels[ys * effu_w + x] = (*cc);
-		pixels[(ys - 1) * effu_w + x] = (*cc);
+		ys -= 1;
+		pixels[ys * effu_w + x] = color;
 	}
 
 }
@@ -352,7 +345,7 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 		ybuffer[i] = effu_h;
 	}
 
-	float dz = 0.001;
+	float dz = 0.5;
 	float z = 1;
 	plx = 0;
 	ply = 0;
@@ -367,14 +360,15 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 		float dx = (prx - plx) / sw;
 		float dy = (pry - ply) / sw;
 
+		float zz = h * cos(sin(z*0.01));
+
 		for (int i = 0; i < sw; i += 1) {
 			int c_plx = (int)plx & 1023;
 			int c_ply = (int)ply & 1023;
 			int offset = (c_ply << 10) + c_plx;
 
-
-			int height_on_screen = (int)(((h  * cos(sin(z*0.01))) - colormap_buffer[offset]) / z * scale_h + horizon);
-			height_on_screen *= 2;
+			int height_on_screen = (int)((zz - colormap_buffer[offset]) / z * scale_h + horizon);
+			height_on_screen << 1;
 			VertLine(i, (int)height_on_screen + effu_h, ybuffer[i], heightmap_buffer[offset], z);
 
 
@@ -383,7 +377,7 @@ void DoHeightmap(float px, float py, float angle, float h, float horizon, float 
 		}
 
 		z += dz;
-		dz += 0.01;
+		dz += 0.05;
 	}
 }
 
@@ -993,7 +987,7 @@ int main(int argc, char * argv[]) {
 	}
 
 	win = SDL_CreateWindow("instanssi 2019 demo", 8, 8, 1920, 1080, SDL_WINDOW_SHOWN);
-	SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	//SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
 	if (win == nullptr) {
 		std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
@@ -1174,50 +1168,11 @@ int main(int argc, char * argv[]) {
 	BASS_Init(-1, 44100, 0, 0, 0);
 	stream = BASS_StreamCreateFile(false, "music.ogg", 0, 0, BASS_STREAM_PRESCAN);
 
-	int sock, n;
-	unsigned int length;
-	struct sockaddr_in server;
-	struct hostent *hp;
-	//lightnum  //color
-	char buffer[159] = { 0x1, 0x1,0x00,0x00,  0xff,0x00,0x00,
-							0x1,1, 0, 0,0,0,
-							0x1,2, 0, 0,0,0,
-							0x1,3, 0, 0,0,0,
-							0x1,4, 0, 0,0,0,
-							0x1,5, 0, 0,0,0,
-							0x1,6, 0, 0,0,0,
-							0x1,7, 0, 0,0,0,
-							0x1,8, 0, 0,0,0,
-							0x1,9, 0, 0,0,0,
-							0x1,10, 0, 0,0,0,
-							0x1,11, 0, 0,0,0,
-							0x1,12, 0, 0,0,0,
-							0x1,13, 0, 0,0,0,
-							0x1,14, 0, 0,0,0,
-							0x1,15, 0, 0,0,0,
-							0x1,16, 0, 0,0,0,
-							0x1,17, 0, 0,0,0,
-							0x1,18, 0, 0,0,0,
-							0x1,19, 0, 0,0,0,
-							0x1,20, 0, 0,0,0,
-							0x1,21, 0, 0,0,0,
-							0x1,22, 0, 0,0,0,
-							0x1,23, 0, 0,0,0,
-							0x1,24, 0, 0,0,0
-	};
-	hp = gethostbyname("valot.party");
-	sock = socket(AF_INET, SOCK_DGRAM, 0);
-	int removeme;
-	server.sin_family = AF_INET;
-	bcopy((char *)hp->h_addr,
-		(char *)&server.sin_addr,
-		hp->h_length);
-	server.sin_port = htons(atoi("9909"));
-
-	length = sizeof(struct sockaddr_in);
 	/* let's roll! */
 	BASS_Start();
 	BASS_ChannelPlay(stream, false);
+
+	memset(pixelskuvio, 0, 160 * 100 * sizeof(Uint32));
 
 	while (!quit) {
 		while (SDL_PollEvent(&e)) {
@@ -1261,7 +1216,6 @@ int main(int argc, char * argv[]) {
 		time = row * row_rate * 4;
 
 		memset(pixels, 0, effu_w * effu_h * sizeof(Uint32));
-		memset(pixelskuvio, 0, 160 * 100 * sizeof(Uint32));
 
 		int sync_scene = (int)sync_get_val(scene, row);
 		// draw scene
@@ -1304,74 +1258,7 @@ int main(int argc, char * argv[]) {
 
 		BASS_Update(0); /* decrease the chance of missing vsync */
 
-		if (sync_scene == 0) {
-			for (int i = 0; i < 151; i += 6) {
-				buffer[4 + i] = 200 + sin(time*0.005 + i * 0.1) * 50;
-				buffer[5 + i] = 128 + sin(time*0.005 + i * 0.1) * 64;
-				buffer[6 + i] = 128 + sin(time*0.005 + i * 0.1) * 128;
-			}
-#ifdef VALOT
-			n = sendto(sock, buffer, sizeof(buffer) - 8, 0, (const struct sockaddr *)&server, length);
-#endif
-		}
-
-		if (sync_scene == 1) {
-			for (int i = 0; i < 151 - 6; i += 6) {
-				buffer[4 + i] = 128 + sin(time*0.005 + i * 1.1) * 127;
-				buffer[5 + i] = 128 + sin(time*0.005 + i * 1.1) * 127;
-				buffer[6 + i] = 0;
-			}
-#ifdef VALOT
-			n = sendto(sock, buffer, sizeof(buffer)-8, 0, (const struct sockaddr *)&server, length);
-#endif
-			}
-
-
-		if (sync_scene == 3) {
-			for (int i = 0; i < 151; i += 6) {
-				buffer[4 + i] = 64;
-				buffer[5 + i] = 16;
-				buffer[6 + i] = 16;
-			}
-#ifdef VALOT
-			n = sendto(sock, buffer, sizeof(buffer) - 8, 0, (const struct sockaddr *)&server, length);
-#endif
-			}
-
-		if (sync_scene == 4) {
-			for (int i = 0; i < 151; i += 6) {
-				buffer[4 + i] = 128 + sin(time*0.01 + i * 0.3) * 128;
-				buffer[5 + i] = 128 + sin(time*0.01 + i * 0.3) * 128;
-				buffer[6 + i] = 128 + sin(time*0.01 + i * 0.3) * 128;
-			}
-#ifdef VALOT
-			n = sendto(sock, buffer, sizeof(buffer) - 8, 0, (const struct sockaddr *)&server, length);
-#endif
-			}
-
-		if (sync_scene == 5) {
-			for (int i = 0; i < 151 - 6; i += 6) {
-				buffer[4 + i] = 128 + sin(time*0.1 + i * 0.3) * 128;
-				buffer[5 + i] = 0;
-				buffer[6 + i] = 0;
-			}
-#ifdef VALOT
-			n = sendto(sock, buffer, sizeof(buffer) - 8, 0, (const struct sockaddr *)&server, length);
-#endif
-			}
-
-		if (sync_scene == 6) {
-			for (int i = 0; i < 151 - 6; i += 6) {
-				buffer[4 + i] = 128 + sin(i*100. + time * 0.1) * 127;
-				buffer[5 + i] = 255;
-				buffer[6 + i] = 255;
-			}
-#ifdef VALOT
-			n = sendto(sock, buffer, sizeof(buffer) - 8, 0, (const struct sockaddr *)&server, length);
-#endif
-			}
-
-
+		
 		}
 
 #ifndef SYNC_PLAYER
