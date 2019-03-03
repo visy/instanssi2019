@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rootElement>
+<tracks rows="10000" startRow="0" endRow="2878" rowsPerBeat="8"
+beatsPerMin="125">
+	<track name="scene" folded="0" muteKeyCount="0" color="ffb27474">
+		<key row="0" value="3.000000" interpolation="0" />
+		<key row="320" value="0.000000" interpolation="0" />
+		<key row="960" value="2.000000" interpolation="0" />
+		<key row="1266" value="2.000000" interpolation="0" />
+		<key row="1269" value="5.000000" interpolation="0" />
+		<key row="1272" value="2.000000" interpolation="0" />
+		<key row="1273" value="5.000000" interpolation="0" />
+		<key row="1274" value="2.000000" interpolation="0" />
+		<key row="1275" value="5.000000" interpolation="0" />
+		<key row="1276" value="2.000000" interpolation="0" />
+		<key row="1277" value="5.000000" interpolation="0" />
+		<key row="1278" value="2.000000" interpolation="0" />
+		<key row="1279" value="5.000000" interpolation="0" />
+		<key row="1280" value="1.000000" interpolation="0" />
+		<key row="1601" value="4.000000" interpolation="0" />
+		<key row="1615" value="4.000000" interpolation="0" />
+		<key row="1761" value="5.000000" interpolation="0" />
+		<key row="1960" value="7.000000" interpolation="0" />
+		<key row="2104" value="5.000000" interpolation="0" />
+		<key row="2136" value="0.000000" interpolation="0" />
+		<key row="2816" value="3.000000" interpolation="0" />
+		<key row="2865" value="4.000000" interpolation="0" />
+	</track>
+	<track name="clear.r" folded="0" muteKeyCount="0"
+color="ffb28050">
+		<key row="0" value="0.000000" interpolation="0" />
+		<key row="48" value="0.000000" interpolation="1" />
+		<key row="72" value="128.000000" interpolation="3" />
+		<key row="78" value="220.000000" interpolation="2" />
+		<key row="84" value="60.000000" interpolation="2" />
+		<key row="90" value="220.000000" interpolation="2" />
+		<key row="96" value="128.000000" interpolation="3" />
+		<key row="102" value="240.000000" interpolation="3" />
+		<key row="108" value="80.000000" interpolation="1" />
+		<key row="120" value="255.000000" interpolation="0" />
+		<key row="160" value="255.000000" interpolation="3" />
+		<key row="225" value="0.000000" interpolation="1" />
+		<key row="249" value="255.000000" interpolation="1" />
+		<key row="272" value="0.000000" interpolation="2" />
+		<key row="295" value="255.000000" interpolation="1" />
+		<key row="312" value="0.000000" interpolation="0" />
+		<key row="320" value="0.000000" interpolation="0" />
+		<key row="1280" value="0.000000" interpolation="1" />
+		<key row="1298" value="122.000000" interpolation="0" />
+		<key row="1311" value="11.000000" interpolation="1" />
+		<key row="1313" value="122.000000" interpolation="0" />
+		<key row="1314" value="11.000000" interpolation="1" />
+		<key row="1316" value="122.000000" interpolation="0" />
+		<key row="1319" value="233.000000" interpolation="1" />
+		<key row="1322" value="0.000000" interpolation="0" />
+		<key row="1336" value="233.000000" interpolation="1" />
+		<key row="1339" value="0.000000" interpolation="0" />
+		<key row="1343" value="233.000000" interpolation="1" />
+		<key row="1346" value="0.000000" interpolation="0" />
+		<key row="1352" value="123.000000" interpolation="1" />
+		<key row="1356" value="0.000000" interpolation="0" />
+		<key row="1440" value="0.000000" interpolation="1" />
+		<key row="1446" value="255.000000" interpolation="1" />
+		<key row="1447" value="0.000000" interpolation="1" />
+		<key row="1453" value="255.000000" interpolation="1" />
+		<key row="1454" value="0.000000" interpolation="1" />
+		<key row="1461" value="255.000000" interpolation="1" />
+		<key row="1462" value="0.000000" interpolation="1" />
+		<key row="1468" value="255.000000" interpolation="1" />
+		<key row="1469" value="0.000000" interpolation="1" />
+		<key row="1475" value="255.000000" interpolation="1" />
+		<key row="1476" value="0.000000" interpolation="1" />
+		<key row="1483" value="3232.000000" interpolation="1" />
+		<key row="1484" value="0.000000" interpolation="1" />
+		<key row="1490" value="255.000000" interpolation="1" />
+		<key row="1491" value="0.000000" interpolation="1" />
+		<key row="1496" value="123.000000" interpolation="1" />
+		<key row="1498" value="1.000000" interpolation="1" />
+		<key row="1499" value="23.000000" interpolation="1" />
+		<key row="1501" value="12.000000" interpolation="1" />
+		<key row="1502" value="3.000000" interpolation="1" />
+		<key row="1503" value="123.000000" interpolation="1" />
+		<key row="1504" value="3.000000" interpolation="1" />
+		<key row="1505" value="3.000000" interpolation="1" />
+		<key row="1506" value="32.000000" interpolation="1" />
+		<key row="1507" value="21.000000" interpolation="1" />
+		<key row="1508" value="312.000000" interpolation="1" />
+		<key row="1509" value="2.000000" interpolation="1" />
+		<key row="1510" value="32.000000" interpolation="1" />
+		<key row="1511" value="3232.000000" interpolation="1" />
+		<key row="1514" value="321.000000" interpolation="1" />
+		<key row="1516" value="3.000000" interpolation="1" />
+		<key row="1518" value="23.000000" interpolation="1" />
+		<key row="1520" value="12.000000" interpolation="1" />
+		<key row="1521" value="3.000000" interpolation="1" />
+		<key row="1522" value="12.000000" interpolation="1" />
+		<key row="1523" value="3.000000" interpolation="1" />
+		<key row="1524" value="13.000000" interpolation="1" />
+		<key row="1525" value="12.000000" interpolation="1" />
+		<key row="1526" value="3.000000" interpolation="1" />
+		<key row="1528" value="33.000000" interpolation="1" />
+		<key row="1529" value="2.000000" interpolation="1" />
+		<key row="1530" value="3232.000000" interpolation="1" />
+		<key row="1531" value="32.000000" interpolation="1" />
+		<key row="1532" value="32.000000" interpolation="1" />
+		<key row="1534" value="332.000000" interpolation="1" />
+		<key row="1535" value="2.000000" interpolation="1" />
+		<key row="1536" value="12.000000" interpolation="1" />
+		<key row="1537" value="3.000000" interpolation="1" />
+		<key row="1539" value="3.000000" interpolation="1" />
+		<key row="1540" value="12.000000" interpolation="1" />
+		<key row="1542" value="32.000000" interpolation="1" />
+		<key row="1543" value="213.000000" interpolation="1" />
+		<key row="1544" value="23.000000" interpolation="1" />
+		<key row="1545" value="31.000000" interpolation="1" />
+		<key row="1546" value="312.000000" interpolation="1" />
+		<key row="1547" value="312.000000" interpolation="1" />
+		<key row="1548" value="3.000000" interpolation="1" />
+		<key row="1549" value="1.000000" interpolation="1" />
+		<key row="1550" value="32.000000" interpolation="1" />
+		<key row="1551" value="312.000000" interpolation="1" />
+		<key row="1552" value="32.000000" interpolation="1" />
+		<key row="1553" value="31.000000" interpolation="1" />
+		<key row="1554" value="312.000000" interpolation="1" />
+		<key row="1555" value="312.000000" interpolation="1" />
+		<key row="1556" value="3.000000" interpolation="1" />
+		<key row="1557" value="3.000000" interpolation="1" />
+		<key row="1558" value="132.000000" interpolation="1" />
+		<key row="1559" value="132.000000" interpolation="1" />
+		<key row="1560" value="3.000000" interpolation="1" />
+		<key row="1564" value="31232.000000" interpolation="1" />
+		<key row="1567" value="123.000000" interpolation="1" />
+		<key row="1569" value="21.000000" interpolation="1" />
+		<key row="1570" value="3.000000" interpolation="1" />
+		<key row="1571" value="21.000000" interpolation="1" />
+		<key row="1573" value="211.000000" interpolation="1" />
+		<key row="1574" value="312.000000" interpolation="1" />
+		<key row="1575" value="21.000000" interpolation="1" />
+		<key row="1576" value="32.000000" interpolation="1" />
+		<key row="1578" value="1.000000" interpolation="1" />
+		<key row="1579" value="31312.000000" interpolation="1" />
+		<key row="1580" value="3132.000000" interpolation="1" />
+		<key row="1582" value="3.000000" interpolation="1" />
+		<key row="1583" value="31.000000" interpolation="1" />
+		<key row="1584" value="31.000000" interpolation="1" />
+		<key row="1585" value="321.000000" interpolation="1" />
+		<key row="1587" value="313233.000000" interpolation="1" />
+		<key row="1588" value="23.000000" interpolation="1" />
+		<key row="1589" value="32.000000" interpolation="1" />
+		<key row="1590" value="31.000000" interpolation="1" />
+		<key row="1592" value="3113232.000000" interpolation="1" />
+		<key row="1593" value="21.000000" interpolation="1" />
+		<key row="1594" value="1.000000" interpolation="1" />
+		<key row="1595" value="12.000000" interpolation="1" />
+		<key row="1596" value="312.000000" interpolation="1" />
+		<key row="1597" value="321.000000" interpolation="1" />
+		<key row="1598" value="321.000000" interpolation="1" />
+		<key row="1599" value="32.000000" interpolation="1" />
+		<key row="1600" value="222.000000" interpolation="0" />
+		<key row="2816" value="222.000000" interpolation="1" />
+		<key row="2864" value="0.000000" interpolation="0" />
+	</track>
+	<track name="clear.g" folded="0" muteKeyCount="0"
+color="ffa9b250">
+		<key row="0" value="0.000000" interpolation="1" />
+		<key row="120" value="255.000000" interpolation="0" />
+		<key row="160" value="255.000000" interpolation="0" />
+		<key row="225" value="255.000000" interpolation="2" />
+		<key row="249" value="9.000000" interpolation="1" />
+		<key row="272" value="128.000000" interpolation="1" />
+		<key row="312" value="0.000000" interpolation="0" />
+		<key row="320" value="0.000000" interpolation="0" />
+		<key row="1280" value="0.000000" interpolation="1" />
+		<key row="1298" value="22.000000" interpolation="0" />
+		<key row="1311" value="0.000000" interpolation="1" />
+		<key row="1313" value="22.000000" interpolation="0" />
+		<key row="1314" value="0.000000" interpolation="1" />
+		<key row="1316" value="22.000000" interpolation="0" />
+		<key row="1319" value="32.000000" interpolation="1" />
+		<key row="1322" value="0.000000" interpolation="0" />
+		<key row="1352" value="55.000000" interpolation="1" />
+		<key row="1356" value="0.000000" interpolation="0" />
+		<key row="1440" value="22.000000" interpolation="1" />
+		<key row="1600" value="12.000000" interpolation="0" />
+		<key row="2816" value="12.000000" interpolation="1" />
+		<key row="2864" value="0.000000" interpolation="0" />
+	</track>
+	<track name="clear.b" folded="0" muteKeyCount="0"
+color="ff60b250">
+		<key row="0" value="0.000000" interpolation="1" />
+		<key row="120" value="255.000000" interpolation="0" />
+		<key row="160" value="255.000000" interpolation="3" />
+		<key row="225" value="200.000000" interpolation="3" />
+		<key row="249" value="0.000000" interpolation="1" />
+		<key row="272" value="255.000000" interpolation="1" />
+		<key row="312" value="0.000000" interpolation="0" />
+		<key row="320" value="0.000000" interpolation="0" />
+		<key row="1280" value="0.000000" interpolation="1" />
+		<key row="1298" value="22.000000" interpolation="0" />
+		<key row="1311" value="0.000000" interpolation="1" />
+		<key row="1313" value="22.000000" interpolation="0" />
+		<key row="1314" value="0.000000" interpolation="1" />
+		<key row="1316" value="22.000000" interpolation="0" />
+		<key row="1319" value="32.000000" interpolation="1" />
+		<key row="1322" value="0.000000" interpolation="0" />
+		<key row="1352" value="22.000000" interpolation="1" />
+		<key row="1356" value="0.000000" interpolation="0" />
+		<key row="1440" value="22.000000" interpolation="1" />
+		<key row="1600" value="12.000000" interpolation="0" />
+		<key row="2864" value="0.000000" interpolation="0" />
+	</track>
+	<track name="clear.a" folded="0" muteKeyCount="0"
+color="ff4fb292">
+		<key row="0" value="0.000000" interpolation="0" />
+		<key row="79" value="1.000000" interpolation="0" />
+		<key row="120" value="0.000000" interpolation="0" />
+		<key row="160" value="2.000000" interpolation="0" />
+		<key row="168" value="2.000000" interpolation="0" />
+		<key row="178" value="0.000000" interpolation="0" />
+		<key row="189" value="2.000000" interpolation="0" />
+		<key row="199" value="0.000000" interpolation="0" />
+		<key row="320" value="0.000000" interpolation="0" />
+		<key row="480" value="16.000000" interpolation="0" />
+		<key row="544" value="0.000000" interpolation="0" />
+		<key row="560" value="17.000000" interpolation="0" />
+		<key row="632" value="0.000000" interpolation="0" />
+		<key row="640" value="18.000000" interpolation="0" />
+		<key row="712" value="0.000000" interpolation="0" />
+		<key row="960" value="0.000000" interpolation="0" />
+		<key row="984" value="32.000000" interpolation="0" />
+		<key row="1040" value="33.000000" interpolation="0" />
+		<key row="1120" value="34.000000" interpolation="0" />
+		<key row="1200" value="0.000000" interpolation="0" />
+		<key row="1992" value="0.000000" interpolation="0" />
+		<key row="2040" value="1.000000" interpolation="0" />
+		<key row="2064" value="2.000000" interpolation="0" />
+		<key row="2088" value="0.000000" interpolation="0" />
+		<key row="2152" value="50.000000" interpolation="0" />
+		<key row="2240" value="51.000000" interpolation="0" />
+		<key row="2400" value="52.000000" interpolation="0" />
+		<key row="2560" value="53.000000" interpolation="0" />
+		<key row="2720" value="54.000000" interpolation="0" />
+		<key row="2792" value="0.000000" interpolation="0" />
+	</track>
+	<track name="cam.rot" folded="0" muteKeyCount="0"
+color="ff4f71b2">
+		<key row="320" value="0.000000" interpolation="0" />
+		<key row="473" value="0.000000" interpolation="2" />
+		<key row="632" value="4.000000" interpolation="0" />
+		<key row="1280" value="0.000000" interpolation="1" />
+		<key row="1600" value="64.000000" interpolation="0" />
+		<key row="1601" value="-4.000000" interpolation="1" />
+		<key row="1760" value="3.000000" interpolation="0" />
+		<key row="2080" value="28.000000" interpolation="0" />
+	</track>
+	<track name="cam.dist" folded="0" muteKeyCount="0"
+color="ff8850b2">
+		<key row="320" value="0.000000" interpolation="2" />
+		<key row="560" value="1000.000000" interpolation="0" />
+		<key row="593" value="1000.000000" interpolation="1" />
+		<key row="959" value="0.000000" interpolation="0" />
+		<key row="1280" value="0.000000" interpolation="1" />
+		<key row="1614" value="22.000000" interpolation="0" />
+		<key row="2080" value="481.000000" interpolation="0" />
+	</track>
+	<track name="cam.x" folded="0" muteKeyCount="0" color="ffb25091">
+		<key row="320" value="900.000000" interpolation="2" />
+		<key row="560" value="1000.000000" interpolation="0" />
+		<key row="679" value="1000.000000" interpolation="2" />
+		<key row="756" value="828.000000" interpolation="0" />
+		<key row="812" value="828.000000" interpolation="3" />
+		<key row="959" value="600.000000" interpolation="0" />
+		<key row="1266" value="3.000000" interpolation="0" />
+		<key row="1273" value="2.000000" interpolation="0" />
+		<key row="1601" value="0.000000" interpolation="0" />
+		<key row="1760" value="7.000000" interpolation="0" />
+		<key row="2080" value="96.000000" interpolation="1" />
+		<key row="2816" value="2000.000000" interpolation="1" />
+	</track>
+	<track name="cam.y" folded="0" muteKeyCount="0" color="ffb27474">
+		<key row="320" value="25.000000" interpolation="0" />
+		<key row="616" value="25.000000" interpolation="2" />
+		<key row="888" value="-568.590454" interpolation="0" />
+		<key row="1266" value="3.000000" interpolation="0" />
+		<key row="1273" value="2.000000" interpolation="0" />
+		<key row="1601" value="0.000000" interpolation="1" />
+		<key row="1760" value="9.000000" interpolation="0" />
+		<key row="2080" value="99.000000" interpolation="1" />
+		<key row="2816" value="150.000000" interpolation="0" />
+	</track>
+	<track name="cam.h" folded="0" muteKeyCount="0" color="ffb28050">
+		<key row="0" value="9743.000000" interpolation="0" />
+		<key row="18" value="9977.000000" interpolation="0" />
+		<key row="40" value="9475.000000" interpolation="0" />
+		<key row="45" value="9143.000000" interpolation="0" />
+		<key row="49" value="99999.000000" interpolation="0" />
+		<key row="79" value="47993.000000" interpolation="0" />
+		<key row="118" value="4999.000000" interpolation="0" />
+		<key row="139" value="10002.000000" interpolation="0" />
+		<key row="160" value="10003.000000" interpolation="3" />
+		<key row="232" value="10022.000000" interpolation="0" />
+		<key row="240" value="10022.000000" interpolation="3" />
+		<key row="312" value="9986.000000" interpolation="0" />
+		<key row="320" value="30.000000" interpolation="0" />
+		<key row="1266" value="3.000000" interpolation="0" />
+		<key row="1273" value="2.000000" interpolation="0" />
+		<key row="1601" value="2.200000" interpolation="1" />
+		<key row="1760" value="0.700000" interpolation="0" />
+		<key row="2080" value="40.000000" interpolation="1" />
+		<key row="2400" value="10.000000" interpolation="0" />
+	</track>
+	<track name="cam.hori" folded="0" muteKeyCount="0"
+color="ffa9b250">
+		<key row="320" value="0.000000" interpolation="0" />
+		<key row="1266" value="3.000000" interpolation="0" />
+		<key row="1273" value="2.000000" interpolation="0" />
+		<key row="1761" value="-1.000000" interpolation="0" />
+		<key row="1824" value="0.000000" interpolation="0" />
+		<key row="1840" value="0.000000" interpolation="1" />
+		<key row="1864" value="0.900000" interpolation="0" />
+		<key row="1896" value="1.000000" interpolation="1" />
+		<key row="1912" value="2.000000" interpolation="0" />
+	</track>
+	<track name="cam.scaleh" folded="0" muteKeyCount="0"
+color="ff60b250">
+		<key row="320" value="50.000000" interpolation="0" />
+	</track>
+</tracks>
+	</rootElement>

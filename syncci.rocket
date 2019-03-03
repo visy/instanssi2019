@@ -20,7 +20,9 @@ beatsPerMin="125">
 		<key row="1601" value="4.000000" interpolation="0" />
 		<key row="1615" value="4.000000" interpolation="0" />
 		<key row="1761" value="5.000000" interpolation="0" />
-		<key row="2080" value="0.000000" interpolation="0" />
+		<key row="1960" value="7.000000" interpolation="0" />
+		<key row="2104" value="5.000000" interpolation="0" />
+		<key row="2136" value="0.000000" interpolation="0" />
 		<key row="2816" value="3.000000" interpolation="0" />
 		<key row="2865" value="4.000000" interpolation="0" />
 	</track>
@@ -232,8 +234,8 @@ color="ff4fb292">
 		<key row="1992" value="0.000000" interpolation="0" />
 		<key row="2040" value="1.000000" interpolation="0" />
 		<key row="2064" value="2.000000" interpolation="0" />
-		<key row="2080" value="0.000000" interpolation="0" />
-		<key row="2136" value="50.000000" interpolation="0" />
+		<key row="2088" value="0.000000" interpolation="0" />
+		<key row="2152" value="50.000000" interpolation="0" />
 		<key row="2240" value="51.000000" interpolation="0" />
 		<key row="2400" value="52.000000" interpolation="0" />
 		<key row="2560" value="53.000000" interpolation="0" />
@@ -313,10 +315,11 @@ color="ffa9b250">
 		<key row="1266" value="3.000000" interpolation="0" />
 		<key row="1273" value="2.000000" interpolation="0" />
 		<key row="1761" value="-1.000000" interpolation="0" />
-		<key row="1824" value="0.000000" interpolation="1" />
-		<key row="1853" value="0.900000" interpolation="0" />
-		<key row="1872" value="1.000000" interpolation="1" />
-		<key row="1888" value="2.000000" interpolation="0" />
+		<key row="1824" value="0.000000" interpolation="0" />
+		<key row="1840" value="0.000000" interpolation="1" />
+		<key row="1864" value="0.900000" interpolation="0" />
+		<key row="1896" value="1.000000" interpolation="1" />
+		<key row="1912" value="2.000000" interpolation="0" />
 	</track>
 	<track name="cam.scaleh" folded="0" muteKeyCount="0"
 color="ff60b250">
